@@ -8,3 +8,5 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Keep the supplied Studiehub as standalone static HTML under `public/studiehub`; this preserves its GitHub Pages compatibility and existing integrations.
