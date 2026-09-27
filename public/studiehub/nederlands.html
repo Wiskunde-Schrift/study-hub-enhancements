@@ -1,0 +1,2041 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Parker Bergman · Nederlands</title>
+<meta name="description" content="Studiehub voor Nederlands — Parker Bergman, 5G">
+<style>
+  /* ============================================================
+     TOKENS — zelfde template als de andere vakpagina's,
+     hier ingesteld op wit/licht als accent voor Nederlands.
+     ============================================================ */
+  :root{
+    --bg:#0f0f11;
+    --bg-alt:#151517;
+    --card:#1e1e24;
+    --card-border:#2c2c34;
+    --card-border-hover:#3c3c46;
+    --ink:#f2f2f4;
+    --ink-dim:#a6a6b0;
+    --ink-faint:#6c6c78;
+    --accent:#ffffff;          /* nederlands: wit accent */
+    --accent-soft:#ffffff14;
+    --accent-line:#ffffff66;
+    --danger:#e05d5d;
+    --ok:#4fbf7d;
+    --radius:16px;
+    --radius-sm:10px;
+    --font-display: "Iowan Old Style","Palatino Linotype","Georgia",ui-serif,serif;
+    --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-mono: "SF Mono", "Cascadia Code", "Roboto Mono", Consolas, monospace;
+    --ease: cubic-bezier(.16,1,.3,1);
+  }
+
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    margin:0;
+    font-size:16px;
+    background:
+      radial-gradient(1200px 600px at 50% -10%, #1c1c22 0%, var(--bg) 55%),
+      var(--bg);
+    color:var(--ink);
+    font-family:var(--font-body);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    min-height:100dvh;
+    transition:font-size .2s var(--ease);
+  }
+  ::selection{background:var(--accent-soft); color:var(--ink);}
+  a{color:inherit;}
+  button{font-family:inherit;}
+  :focus-visible{outline:2px solid var(--accent); outline-offset:3px; border-radius:6px;}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important;}
+  }
+
+  /* ---------------- DYSLEXIE-LEESMODUS ----------------
+     Groter lettertype, meer letter-/regelafstand, en een
+     lettertype dat over het algemeen makkelijker leesbaar is
+     voor mensen met dyslexie (geen serif, geen fijne krulletters). */
+  body.dyslexie-mode{
+    font-size:18px;
+    letter-spacing:0.015em;
+  }
+  body.dyslexie-mode, body.dyslexie-mode input, body.dyslexie-mode textarea, body.dyslexie-mode button, body.dyslexie-mode select{
+    font-family:Verdana, Arial, sans-serif;
+  }
+  body.dyslexie-mode h1.name{
+    font-family:Verdana, Arial, sans-serif;
+    letter-spacing:0.005em;
+  }
+  body.dyslexie-mode p,
+  body.dyslexie-mode .chapter-title,
+  body.dyslexie-mode .card-sub,
+  body.dyslexie-mode .binas-note,
+  body.dyslexie-mode li{
+    line-height:1.9;
+  }
+
+  .wrap{max-width:920px; margin:0 auto; padding:0 20px 80px;}
+
+  /* ---------------- HERO ---------------- */
+  .hero{
+    position:relative;
+    padding:56px 20px 40px;
+    overflow:hidden;
+    border-bottom:1px solid var(--card-border);
+    margin-bottom:36px;
+  }
+  .hero-curve{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    opacity:.4;
+    pointer-events:none;
+  }
+  .hero-inner{position:relative; max-width:920px; margin:0 auto;}
+  .hub-back{
+    display:inline-flex; align-items:center; gap:4px;
+    font-size:12.5px; color:var(--ink-faint);
+    text-decoration:none; margin-bottom:18px;
+    transition:color .2s var(--ease);
+  }
+  .hub-back:hover{color:var(--ink);}
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:12px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+    margin:0 0 14px;
+  }
+  h1.name{
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:clamp(32px, 7vw, 52px);
+    letter-spacing:-0.01em;
+    margin:0 0 6px;
+    color:var(--ink);
+  }
+  .meta-row{
+    display:flex; flex-direction:column; gap:3px;
+    margin-bottom:34px;
+  }
+  .meta-row .byline{font-size:14.5px; color:var(--ink-dim);}
+  .meta-row a{
+    font-size:13px; color:var(--ink-faint);
+    text-decoration:underline; text-decoration-color:var(--card-border-hover); text-underline-offset:3px;
+    width:fit-content;
+  }
+  .meta-row a:hover{color:var(--ink-dim); text-decoration-color:var(--ink-dim);}
+
+  /* ---------------- PIN GATE ---------------- */
+  .pin-card{
+    background:var(--card);
+    border:1px solid var(--card-border);
+    border-radius:var(--radius);
+    padding:26px 24px;
+    max-width:420px;
+  }
+  .pin-card p{
+    margin:0 0 16px;
+    font-size:14px;
+    color:var(--ink-dim);
+  }
+  .pin-form{display:flex; gap:10px;}
+  .pin-input{
+    flex:1;
+    background:var(--bg-alt);
+    border:1px solid var(--card-border);
+    border-radius:var(--radius-sm);
+    color:var(--ink);
+    font-family:var(--font-mono);
+    font-size:20px;
+    letter-spacing:.3em;
+    text-align:center;
+    padding:12px 10px;
+    min-width:0;
+    transition:border-color .2s var(--ease);
+  }
+  .pin-input:focus{border-color:var(--accent-line);}
+  .pin-submit{
+    background:var(--ink);
+    color:#0f0f11;
+    border:none;
+    border-radius:var(--radius-sm);
+    padding:0 20px;
+    font-weight:600;
+    font-size:14px;
+    cursor:pointer;
+    transition:transform .15s var(--ease), opacity .15s var(--ease);
+  }
+  .pin-submit:hover{opacity:.88;}
+  .pin-submit:active{transform:scale(.97);}
+  .pin-error{
+    margin-top:12px;
+    font-size:13px;
+    color:var(--danger);
+    min-height:16px;
+    opacity:0;
+    transition:opacity .2s var(--ease);
+  }
+  .pin-error.show{opacity:1;}
+  .pin-error.shake{animation:shake .35s var(--ease);}
+  @keyframes shake{
+    20%{transform:translateX(-6px);}
+    40%{transform:translateX(5px);}
+    60%{transform:translateX(-3px);}
+    80%{transform:translateX(2px);}
+    100%{transform:translateX(0);}
+  }
+
+  /* ---------------- DASHBOARD ---------------- */
+  #dashboard{display:none;}
+  #dashboard.visible{
+    display:block;
+    animation:dashboardIn .6s cubic-bezier(.16,1,.3,1);
+  }
+  @keyframes dashboardIn{
+    from{opacity:0; transform:translateY(24px) scale(.97); filter:blur(6px);}
+    to{opacity:1; transform:translateY(0) scale(1); filter:blur(0);}
+  }
+  .pin-card.unlocking{
+    animation:pinOut .38s cubic-bezier(.5,0,.75,0) forwards;
+    pointer-events:none;
+  }
+  @keyframes pinOut{
+    from{opacity:1; transform:scale(1) translateY(0); filter:blur(0);}
+    to{opacity:0; transform:scale(.92) translateY(-10px); filter:blur(4px);}
+  }
+
+  .section-label{
+    font-family:var(--font-mono);
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+    margin:0 0 14px;
+  }
+
+  section.block{margin-bottom:40px;}
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--card-border);
+    border-radius:var(--radius);
+    padding:22px;
+    transition:border-color .2s var(--ease);
+  }
+  .card:hover{border-color:var(--card-border-hover);}
+  .card h3{margin:0 0 4px; font-size:15px; font-weight:600;}
+  .card .card-sub{font-size:12.5px; color:var(--ink-faint); margin:0 0 16px;}
+
+  /* Leesweergave (dyslexie-modus) */
+  .toggle-row{
+    display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
+  }
+  .toggle-btn{
+    display:flex; align-items:center; gap:8px;
+    background:var(--bg-alt);
+    border:1px solid var(--card-border);
+    color:var(--ink);
+    border-radius:999px;
+    padding:9px 16px;
+    font-size:13px;
+    font-weight:600;
+    cursor:pointer;
+    flex-shrink:0;
+    transition:border-color .2s var(--ease), background .2s var(--ease);
+  }
+  .toggle-btn:hover{border-color:var(--card-border-hover);}
+  .toggle-btn[aria-pressed="true"]{
+    background:var(--ink);
+    color:#0f0f11;
+    border-color:var(--ink);
+  }
+  .toggle-dot{width:8px; height:8px; border-radius:50%; background:var(--ink-faint); flex-shrink:0;}
+  .toggle-btn[aria-pressed="true"] .toggle-dot{background:#0f0f11;}
+
+  /* Quick links */
+  .link-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:12px;
+  }
+  .link-btn{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    background:var(--card);
+    border:1px solid var(--card-border);
+    border-radius:var(--radius-sm);
+    padding:16px 18px;
+    text-decoration:none;
+    color:var(--ink);
+    transition:border-color .2s var(--ease), transform .15s var(--ease), background .2s var(--ease);
+  }
+  .link-btn:hover{border-color:var(--card-border-hover); background:var(--bg-alt); transform:translateY(-1px);}
+  .link-btn .lbl{font-weight:600; font-size:14.5px;}
+  .link-btn .sub{display:block; font-size:12px; color:var(--ink-faint); margin-top:2px; font-weight:400;}
+  .link-btn .arrow{color:var(--ink-faint); font-size:16px; flex-shrink:0;}
+
+  /* Gedeelde lijst-stijl */
+  .chapter-list{list-style:none; margin:0; padding:0; display:grid; gap:8px;}
+  .chapter-list li{
+    display:flex; align-items:center; gap:14px;
+    background:var(--card);
+    border:1px solid var(--card-border);
+    border-radius:var(--radius-sm);
+    padding:14px 16px;
+  }
+
+  /* Aankomende afspraken */
+  .agenda-header{
+    display:flex; align-items:flex-start; justify-content:space-between; gap:14px;
+    flex-wrap:wrap;
+  }
+  .refresh-btn{
+    display:flex; align-items:center; gap:6px;
+    background:var(--bg-alt);
+    border:1px solid var(--card-border);
+    color:var(--ink);
+    border-radius:var(--radius-sm);
+    padding:8px 14px;
+    font-size:13px;
+    font-weight:600;
+    cursor:pointer;
+    flex-shrink:0;
+    transition:border-color .2s var(--ease), transform .15s var(--ease);
+  }
+  .refresh-btn:hover{border-color:var(--card-border-hover);}
+  .refresh-btn:active{transform:scale(.96);}
+  .refresh-btn .refresh-icon{display:inline-block; font-size:14px; transition:transform .4s var(--ease);}
+  .refresh-btn.spinning .refresh-icon{animation:spin .6s linear infinite;}
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  .agenda-updated{
+    font-family:var(--font-mono);
+    font-size:11.5px;
+    color:var(--ink-faint);
+    margin:10px 0 16px;
+  }
+  .agenda-updated.err{color:var(--danger);}
+
+  #agenda-list:empty::before{
+    content:"Geen aankomende afspraken gevonden.";
+    display:block;
+    font-size:13.5px;
+    color:var(--ink-faint);
+    padding:10px 2px;
+  }
+  .agenda-item{
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    background:var(--card); border:1px solid var(--card-border);
+    border-radius:var(--radius-sm); padding:12px 14px;
+  }
+  .agenda-item + .agenda-item{margin-top:8px;}
+  .agenda-item .agenda-info{display:flex; flex-direction:column; gap:2px; min-width:0; flex:1;}
+  .agenda-item .agenda-title{font-size:14px; color:var(--ink); font-weight:600; overflow-wrap:anywhere;}
+  .agenda-item .agenda-date{font-size:12px; color:var(--ink-faint); font-family:var(--font-mono);}
+  .agenda-item .agenda-badge{
+    font-family:var(--font-mono); font-size:10px; text-transform:uppercase; letter-spacing:.06em;
+    color:var(--ink-faint); border:1px solid var(--card-border); border-radius:5px;
+    padding:2px 6px; flex-shrink:0;
+  }
+  .agenda-item .agenda-del{
+    background:none; border:1px solid var(--card-border); color:var(--ink-faint);
+    border-radius:8px; width:30px; height:30px; flex-shrink:0; cursor:pointer;
+    font-size:15px; line-height:1; transition:border-color .2s var(--ease), color .2s var(--ease);
+  }
+  .agenda-item .agenda-del:hover{border-color:var(--danger); color:var(--danger);}
+
+  .agenda-manual-toggle{margin-top:16px;}
+  .agenda-manual-toggle summary{
+    cursor:pointer; font-size:13px; color:var(--ink-dim);
+    font-family:var(--font-mono); list-style:none;
+  }
+  .agenda-manual-toggle summary::-webkit-details-marker{display:none;}
+  .agenda-manual-toggle summary:hover{color:var(--ink);}
+
+  /* Formulier-velden (gedeeld) */
+  .field-row{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;}
+  .field-row label{
+    display:block; font-size:11.5px; color:var(--ink-faint); margin-bottom:5px;
+    font-family:var(--font-mono);
+  }
+  .field-row input{
+    width:100%;
+    background:var(--bg-alt);
+    border:1px solid var(--card-border);
+    border-radius:var(--radius-sm);
+    color:var(--ink);
+    font-size:15px;
+    padding:9px 10px;
+  }
+  .field-row input:focus{border-color:var(--accent-line);}
+
+  /* Leeslijst */
+  .boek-item .boek-status{
+    font-family:var(--font-mono);
+    font-size:11px;
+    font-weight:600;
+    padding:6px 12px;
+    border-radius:999px;
+    border:1px solid var(--card-border);
+    background:none;
+    color:var(--ink-faint);
+    cursor:pointer;
+    flex-shrink:0;
+    white-space:nowrap;
+    transition:border-color .2s var(--ease), background .2s var(--ease), color .2s var(--ease);
+  }
+  .boek-item .boek-status:hover{border-color:var(--card-border-hover);}
+  .boek-item[data-status="1"] .boek-status{border-color:var(--accent-line); color:var(--ink);}
+  .boek-item[data-status="2"] .boek-status{background:var(--ink); color:#0f0f11; border-color:var(--ink);}
+  .boek-item .boek-author{font-size:12px; color:var(--ink-faint);}
+
+  /* Alinea-opbouw */
+  .alinea-list{list-style:none; margin:0; padding:0; display:grid; gap:10px;}
+  .alinea-list li{
+    display:flex; gap:12px;
+    background:var(--bg-alt);
+    border:1px solid var(--card-border);
+    border-radius:var(--radius-sm);
+    padding:12px 14px;
+  }
+  .alinea-num{
+    font-family:var(--font-mono);
+    font-size:12px;
+    color:var(--ink);
+    background:var(--card);
+    border:1px solid var(--card-border);
+    border-radius:50%;
+    width:24px; height:24px;
+    flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .alinea-text b{color:var(--ink); font-size:14px;}
+  .alinea-text span{display:block; font-size:12.5px; color:var(--ink-dim); margin-top:2px;}
+  .alinea-tip{
+    margin:16px 0 0;
+    font-size:12.5px;
+    color:var(--ink-faint);
+    font-style:italic;
+    padding:10px 14px;
+    border-left:2px solid var(--card-border-hover);
+  }
+
+  /* Foutenlogboek / woordenlijst */
+  .fout-item{cursor:pointer;}
+  .fout-item.done .fout-text{color:var(--ink-faint); text-decoration:line-through;}
+  .fout-item .fout-text{font-size:14px; color:var(--ink); flex:1; overflow-wrap:anywhere;}
+
+  /* Notes */
+  .split-grid{display:grid; grid-template-columns:1fr; gap:16px;}
+  @media(min-width:720px){.split-grid{grid-template-columns:1fr 1fr;}}
+
+  #notes-area{
+    width:100%;
+    min-height:140px;
+    resize:vertical;
+    background:var(--bg-alt);
+    border:1px solid var(--card-border);
+    border-radius:var(--radius-sm);
+    color:var(--ink);
+    font-family:var(--font-body);
+    font-size:14px;
+    padding:12px;
+    line-height:1.6;
+  }
+  #notes-area:focus{border-color:var(--accent-line);}
+  .notes-status{
+    font-size:11.5px;
+    color:var(--ink-faint);
+    margin-top:8px;
+    font-family:var(--font-mono);
+    height:14px;
+  }
+
+  .add-row{display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap;}
+  .add-row input{
+    flex:1;
+    min-width:120px;
+    background:var(--bg-alt);
+    border:1px solid var(--card-border);
+    border-radius:var(--radius-sm);
+    color:var(--ink);
+    font-size:14px;
+    padding:9px 12px;
+  }
+  .add-row input:focus{border-color:var(--accent-line);}
+  .add-row button{
+    background:var(--ink);
+    color:#0f0f11;
+    border:none;
+    border-radius:var(--radius-sm);
+    padding:0 16px;
+    font-weight:600;
+    font-size:13px;
+    cursor:pointer;
+    flex-shrink:0;
+    transition:opacity .15s var(--ease), transform .15s var(--ease);
+  }
+  .add-row button:hover{opacity:.88;}
+  .add-row button:active{transform:scale(.96);}
+
+  footer{
+    text-align:center;
+    font-size:12px;
+    color:var(--ink-faint);
+    padding:0 20px 10px;
+  }
+
+  @media(max-width:480px){
+    .hero{padding:44px 16px 32px;}
+  }
+
+  /* ================= IDENTITEIT: NEDERLANDS — literair/editoriaal ================= */
+  :root{
+    --radius:4px;
+    --radius-sm:2px;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background-image: repeating-linear-gradient(180deg, transparent, transparent 31px, rgba(255,255,255,.05) 32px);
+    pointer-events:none;
+  }
+  .eyebrow{
+    font-family:var(--font-display);
+    font-style:italic;
+    font-size:15px;
+  }
+  .section-label{
+    font-family:var(--font-display);
+    font-weight:400;
+    font-style:italic;
+    letter-spacing:.02em;
+    text-transform:none;
+    font-size:15px;
+  }
+
+  /* ================= DIEPTE: schaduwlagen voor voor/achter-gevoel ================= */
+  .card, .pin-card, .card-sub{
+    box-shadow:
+      0 2px 5px rgba(0,0,0,.5),
+      0 28px 56px -18px rgba(0,0,0,.85),
+      inset 0 1px 0 rgba(255,255,255,.05);
+  }
+  .card{
+    transition:border-color .2s var(--ease), transform .25s cubic-bezier(.16,1,.3,1), box-shadow .25s var(--ease);
+  }
+  .card:hover{
+    transform:translateY(-5px) scale(1.01);
+    box-shadow:
+      0 6px 14px rgba(0,0,0,.55),
+      0 40px 70px -20px rgba(0,0,0,.9),
+      inset 0 1px 0 rgba(255,255,255,.07);
+  }
+  .hero{
+    box-shadow: 0 40px 70px -30px rgba(0,0,0,.85);
+  }
+  .section-label, h1, h2{
+    text-shadow:0 2px 8px rgba(0,0,0,.3);
+  }
+
+  /* ================= iPhone: voorkom automatisch inzoomen op formuliervelden ================= */
+  @media (max-width:600px){
+    input, select, textarea{ font-size:16px !important; }
+  }
+  /* iPhone: geen blauwe tik-highlight, geen "rubber band" bijeffecten op knoppen */
+  button, a{ -webkit-tap-highlight-color:transparent; }
+  html{ overscroll-behavior-y:none; }
+
+</style>
+
+<style id="subject-view-transition">
+  @view-transition{ navigation:auto; }
+  .hero{ view-transition-name:nederlands; }
+  ::view-transition-group(nederlands){ animation-duration:460ms; animation-timing-function:var(--ease); }
+  @media(prefers-reduced-motion:reduce){ ::view-transition-group(*){ animation-duration:1ms !important; } }
+</style>
+</head>
+<body>
+
+  <header class="hero">
+    <svg class="hero-curve" viewBox="0 0 920 260" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M -20 90 C 200 70, 300 110, 500 90 S 800 70, 940 90" fill="none" stroke="#ffffff" stroke-width="1.2" opacity="0.4"/>
+      <path d="M -20 140 C 220 160, 320 120, 520 140 S 780 160, 940 140" fill="none" stroke="#ffffff" stroke-width="1" opacity="0.25"/>
+      <path d="M -20 190 C 180 175, 340 205, 500 190 S 820 175, 940 190" fill="none" stroke="#ffffff" stroke-width="1" opacity="0.15"/>
+    </svg>
+    <div class="hero-inner">
+      <a href="index.html" class="hub-back">← Hoofdmenu</a>
+      <p class="eyebrow">klank → letter → woord</p>
+      <h1 class="name">Nederlands</h1>
+      <div class="meta-row">
+        <span class="byline">Parker Bergman, 5G</span>
+        <a href="mailto:el128979@leerling.eligant.nl">el128979@leerling.eligant.nl</a>
+      </div>
+
+      <!-- PIN GATE -->
+      <div class="pin-card" id="pin-card">
+        <p>Voer PIN in om studiemateriaal, tools en persoonlijke links te ontgrendelen.</p>
+        <form class="pin-form" id="pin-form" autocomplete="off">
+          <input
+            class="pin-input"
+            id="pin-input"
+            type="password"
+            inputmode="numeric"
+            pattern="[0-9]*"
+            maxlength="8"
+            placeholder="••••"
+            aria-label="PIN code"
+            required
+          >
+          <button class="pin-submit" type="submit">Ontgrendel</button>
+        </form>
+        <p class="pin-error" id="pin-error">Onjuiste PIN. Probeer opnieuw.</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div id="dashboard">
+
+      <!-- A. LEESWEERGAVE -->
+      <section class="block">
+        <p class="section-label">Leesweergave</p>
+        <div class="card toggle-row">
+          <div>
+            <h3>Dyslexie-leesmodus</h3>
+            <p class="card-sub" style="margin:0;">Groter lettertype, meer letter- en regelafstand, en een rustiger lettertype.</p>
+          </div>
+          <button type="button" id="dys-toggle" class="toggle-btn" aria-pressed="false">
+            <span class="toggle-dot"></span> Aan zetten
+          </button>
+        </div>
+      </section>
+
+      <!-- B. QUICK LINKS -->
+      <section class="block">
+        <p class="section-label">Snelle links</p>
+        <div class="link-grid">
+          <a class="link-btn" href="https://boomdigitaal.nl/books" target="_blank" rel="noopener">
+            <span><span class="lbl">Boom digitaal</span><span class="sub">Lesmateriaal Nederlands</span></span>
+          </a>
+          <a class="link-btn" href="https://leerling.somtoday.nl/studiewijzer" target="_blank" rel="noopener">
+            <span><span class="lbl">Somtoday</span><span class="sub">Studiewijzer</span></span>
+          </a>
+          <a class="link-btn" href="https://www.vandale.nl/gratis-woordenboek/nederlands" target="_blank" rel="noopener">
+            <span><span class="lbl">Van Dale</span><span class="sub">Online woordenboek</span></span>
+          </a>
+          <a class="link-btn" href="https://woordenlijst.org" target="_blank" rel="noopener">
+            <span><span class="lbl">Woordenlijst.org</span><span class="sub">Officiële spelling opzoeken</span></span>
+          </a>
+        </div>
+      </section>
+
+      <!-- C. AANKOMENDE AFSPRAKEN (gedeeld met de andere vakpagina's — zelfde agenda.json) -->
+      <section class="block">
+        <p class="section-label">Aankomende afspraken</p>
+        <div class="card">
+          <div class="agenda-header">
+            <p class="card-sub" style="margin:0;">
+              Gesynchroniseerd vanuit je Apple Agenda — wordt elk uur automatisch bijgewerkt.
+            </p>
+            <button type="button" id="agenda-refresh" class="refresh-btn" aria-label="Ververs agenda">
+              <span class="refresh-icon">↻</span> Ververs
+            </button>
+          </div>
+          <p class="agenda-updated" id="agenda-updated">Nog niet gesynchroniseerd.</p>
+
+          <ul class="chapter-list" id="agenda-list"></ul>
+
+          <details class="agenda-manual-toggle">
+            <summary>+ Eigen afspraak toevoegen (niet in je Apple Agenda)</summary>
+            <div class="field-row" style="grid-template-columns:1fr 1fr auto; margin-top:12px;">
+              <div>
+                <label for="agenda-titel">Titel</label>
+                <input type="text" id="agenda-titel" placeholder="Bijv. inleveren boekverslag">
+              </div>
+              <div>
+                <label for="agenda-datum">Datum</label>
+                <input type="date" id="agenda-datum">
+              </div>
+              <div style="align-self:end;">
+                <button type="button" id="agenda-add" class="pin-submit" style="height:38px; padding:0 16px;">Toevoegen</button>
+              </div>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <!-- D. LEESLIJST -->
+      <section class="block">
+        <p class="section-label">Leeslijst</p>
+        <div class="card">
+          <h3>Boeken bijhouden</h3>
+          <p class="card-sub">Tik op de status-knop om te wisselen tussen te lezen → bezig → uitgelezen.</p>
+          <div class="add-row">
+            <input type="text" id="boek-titel" placeholder="Titel">
+            <input type="text" id="boek-auteur" placeholder="Auteur">
+            <button type="button" id="boek-add">Toevoegen</button>
+          </div>
+          <ul class="chapter-list" id="boek-list"></ul>
+        </div>
+      </section>
+
+      <!-- E. ALINEA-OPBOUW -->
+      <section class="block">
+        <p class="section-label">Alinea-opbouw</p>
+        <div class="card">
+          <h3>Vaste opbouw per alinea</h3>
+          <p class="card-sub">Handig om erbij te houden tijdens het schrijven van een betoog of opstel.</p>
+          <ul class="alinea-list">
+            <li><span class="alinea-num">1</span><span class="alinea-text"><b>Kernzin</b><span>De hoofdgedachte van de alinea in één zin.</span></span></li>
+            <li><span class="alinea-num">2</span><span class="alinea-text"><b>Argument</b><span>Waarom is de kernzin waar? Onderbouw 'm.</span></span></li>
+            <li><span class="alinea-num">3</span><span class="alinea-text"><b>Toelichting</b><span>Werk het argument verder uit.</span></span></li>
+            <li><span class="alinea-num">4</span><span class="alinea-text"><b>Voorbeeld</b><span>Maak het concreet met een voorbeeld.</span></span></li>
+            <li><span class="alinea-num">5</span><span class="alinea-text"><b>Afsluiting</b><span>Rond de alinea af en/of leid naar de volgende.</span></span></li>
+          </ul>
+          <p class="alinea-tip">Tip: geen tussenkopjes in lopende tekst — laat de alinea's zelf de structuur dragen.</p>
+        </div>
+      </section>
+
+      <!-- F. MOEILIJKE WOORDEN & VRAGEN -->
+      <section class="block">
+        <p class="section-label">Moeilijke woorden &amp; vragen voor de docent</p>
+        <div class="card">
+          <h3>Bijhouden om op te oefenen</h3>
+          <p class="card-sub">Woorden die je vaak fout schrijft, of dingen die je niet snapt — tik om af te vinken.</p>
+          <div class="add-row">
+            <input type="text" id="fout-input" placeholder="Bijv. hun/hen, of: verschil betoog/beschouwing">
+            <button type="button" id="fout-add">Toevoegen</button>
+          </div>
+          <ul class="chapter-list" id="fout-list"></ul>
+        </div>
+      </section>
+
+      <!-- G. QUICK NOTES -->
+      <section class="block">
+        <p class="section-label">Quick notes</p>
+        <div class="card">
+          <p class="card-sub">Wordt lokaal opgeslagen op dit apparaat.</p>
+          <textarea id="notes-area" placeholder="Snelle herinnering, huiswerk, aantekening..."></textarea>
+          <div class="notes-status" id="notes-status"></div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer>Parker Bergman · 5G · Nederlands</footer>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+
+var firebaseConfig = {
+  apiKey: "AIzaSyBBfErn7QyWPk6_29NycvsQE3cUnDNnD-c",
+  authDomain: "studiehub-parker.firebaseapp.com",
+  projectId: "studiehub-parker",
+  storageBucket: "studiehub-parker.firebasestorage.app",
+  messagingSenderId: "602226551320",
+  appId: "1:602226551320:web:1908516f24d07c8b76b16d"
+};
+var fbApp = initializeApp(firebaseConfig);
+var db = getFirestore(fbApp);
+var pageDocRef = doc(db, "studiehub", "nederlands");
+
+(async function(){
+  "use strict";
+
+  /* ---------------- DYSLEXIE-LEESMODUS ----------------
+     Blijft bewust lokaal (localStorage) i.p.v. cloud-sync: dit is
+     een weergave-voorkeur per apparaat/scherm, geen studie-data. */
+  var DYS_KEY = "nederlands_dyslexie_mode";
+  var dysToggleBtn = null; // wordt hieronder gezet zodra dashboard bestaat
+
+  function applyDysMode(active){
+    document.body.classList.toggle("dyslexie-mode", active);
+    if (dysToggleBtn) {
+      dysToggleBtn.setAttribute("aria-pressed", active ? "true" : "false");
+      dysToggleBtn.querySelector(".toggle-label") &&
+        (dysToggleBtn.querySelector(".toggle-label").textContent = active ? "Uit zetten" : "Aan zetten");
+    }
+  }
+
+  var dysActive = false;
+  try { dysActive = localStorage.getItem(DYS_KEY) === "true"; } catch(e){}
+  applyDysMode(dysActive);
+
+  /* ---------------- CLOUD SYNC (Firestore) ----------------
+     Voor de rest van de vakken-data: alle vakken-data staat in
+     één document per vak, zodat telefoon en laptop hetzelfde zien. */
+  var cloudData = {};
+  try {
+    var snap = await getDoc(pageDocRef);
+    cloudData = snap.exists() ? snap.data() : {};
+  } catch (e) {
+    cloudData = {};
+  }
+  var cloudSaveTimers = {};
+  function cloudGet(key, fallback){
+    return (key in cloudData) ? cloudData[key] : fallback;
+  }
+  function cloudSet(key, value){
+    cloudData[key] = value;
+    clearTimeout(cloudSaveTimers[key]);
+    cloudSaveTimers[key] = setTimeout(function(){
+      var patch = {};
+      patch[key] = value;
+      setDoc(pageDocRef, patch, { merge: true }).catch(function(){});
+    }, 600);
+  }
+
+  /* ---------------- CONFIG ----------------
+     Zelfde client-side PIN als op de andere vakpagina's. Geen
+     echte beveiliging, alleen een drempel tegen toevallig scannen. */
+  var PIN = "1977";
+  var SESSION_KEY = "studiehub_unlocked"; // gedeeld met de andere vakpagina's: 1x ontgrendelen binnen je tab-sessie volstaat
+
+  var pinCard = document.getElementById("pin-card");
+  var pinForm = document.getElementById("pin-form");
+  var pinInput = document.getElementById("pin-input");
+  var pinError = document.getElementById("pin-error");
+  var dashboard = document.getElementById("dashboard");
+
+  function unlock(animated){
+    if (animated){
+      pinCard.classList.add("unlocking");
+      setTimeout(function(){
+        pinCard.style.display = "none";
+        dashboard.classList.add("visible");
+      }, 360);
+    } else {
+      pinCard.style.display = "none";
+      dashboard.classList.add("visible");
+    }
+    try { sessionStorage.setItem(SESSION_KEY, "true"); } catch(e){}
+  }
+
+  try {
+    if (sessionStorage.getItem(SESSION_KEY) === "true") {
+      unlock(false);
+    }
+  } catch(e){}
+
+  pinForm.addEventListener("submit", function(e){
+    e.preventDefault();
+    var val = pinInput.value.trim();
+    if (val === PIN) {
+      pinError.classList.remove("show", "shake");
+      unlock(true);
+    } else {
+      pinError.classList.add("show");
+      pinError.classList.remove("shake");
+      void pinError.offsetWidth;
+      pinError.classList.add("shake");
+      pinInput.value = "";
+      pinInput.focus();
+    }
+  });
+
+  /* Nu dashboard bestaat: koppel de toggle-knop */
+  dysToggleBtn = document.getElementById("dys-toggle");
+  dysToggleBtn.innerHTML = '<span class="toggle-dot"></span><span class="toggle-label">' + (dysActive ? "Uit zetten" : "Aan zetten") + '</span>';
+  applyDysMode(dysActive);
+  dysToggleBtn.addEventListener("click", function(){
+    dysActive = !dysActive;
+    try { localStorage.setItem(DYS_KEY, dysActive ? "true" : "false"); } catch(e){}
+    applyDysMode(dysActive);
+  });
+
+  /* ---------------- LEESLIJST ---------------- */
+  var BOEK_KEY = "leeslijst";
+  var boekTitel = document.getElementById("boek-titel");
+  var boekAuteur = document.getElementById("boek-auteur");
+  var boekAddBtn = document.getElementById("boek-add");
+  var boekList = document.getElementById("boek-list");
+  var STATUS_LABELS = ["Te lezen", "Bezig", "Uitgelezen"];
+
+  function loadBoeken(){
+    return cloudGet(BOEK_KEY, []);
+  }
+
+  function saveBoeken(items){
+    cloudSet(BOEK_KEY, items);
+  }
+
+  function renderBoeken(){
+    var items = loadBoeken();
+    boekList.innerHTML = "";
+    if (items.length === 0) {
+      var empty = document.createElement("li");
+      empty.style.cssText = "color:var(--ink-faint); font-size:13.5px; background:none; border:none; padding:6px 2px;";
+      empty.textContent = "Nog geen boeken toegevoegd.";
+      boekList.appendChild(empty);
+      return;
+    }
+    items.forEach(function(item, idx){
+      var status = item.status || 0;
+      var li = document.createElement("li");
+      li.className = "agenda-item boek-item";
+      li.setAttribute("data-status", status);
+
+      var info = document.createElement("span");
+      info.className = "agenda-info";
+      var titleSpan = document.createElement("span");
+      titleSpan.className = "agenda-title";
+      titleSpan.textContent = item.titel;
+      var authorSpan = document.createElement("span");
+      authorSpan.className = "boek-author";
+      authorSpan.textContent = item.auteur || "";
+      info.appendChild(titleSpan);
+      if (item.auteur) info.appendChild(authorSpan);
+      li.appendChild(info);
+
+      var statusBtn = document.createElement("button");
+      statusBtn.type = "button";
+      statusBtn.className = "boek-status";
+      statusBtn.textContent = STATUS_LABELS[status];
+      statusBtn.addEventListener("click", function(){
+        var all = loadBoeken();
+        all[idx].status = (all[idx].status + 1) % 3;
+        saveBoeken(all);
+        renderBoeken();
+      });
+      li.appendChild(statusBtn);
+
+      var delBtn = document.createElement("button");
+      delBtn.type = "button";
+      delBtn.className = "agenda-del";
+      delBtn.setAttribute("aria-label", "Verwijder");
+      delBtn.textContent = "×";
+      delBtn.addEventListener("click", function(){
+        var all = loadBoeken();
+        all.splice(idx, 1);
+        saveBoeken(all);
+        renderBoeken();
+      });
+      li.appendChild(delBtn);
+
+      boekList.appendChild(li);
+    });
+  }
+
+  function addBoek(){
+    var titel = boekTitel.value.trim();
+    var auteur = boekAuteur.value.trim();
+    if (!titel) { boekTitel.focus(); return; }
+    var items = loadBoeken();
+    items.push({ titel: titel, auteur: auteur, status: 0 });
+    saveBoeken(items);
+    boekTitel.value = "";
+    boekAuteur.value = "";
+    renderBoeken();
+  }
+
+  boekAddBtn.addEventListener("click", addBoek);
+  [boekTitel, boekAuteur].forEach(function(el){
+    el.addEventListener("keydown", function(e){
+      if (e.key === "Enter") { e.preventDefault(); addBoek(); }
+    });
+  });
+
+  renderBoeken();
+
+  /* ---------------- MOEILIJKE WOORDEN & VRAGEN ---------------- */
+  var FOUTEN_KEY = "foutenlog";
+  var foutInput = document.getElementById("fout-input");
+  var foutAddBtn = document.getElementById("fout-add");
+  var foutList = document.getElementById("fout-list");
+
+  function loadFouten(){
+    return cloudGet(FOUTEN_KEY, []);
+  }
+
+  function saveFouten(items){
+    cloudSet(FOUTEN_KEY, items);
+  }
+
+  function renderFouten(){
+    var items = loadFouten();
+    foutList.innerHTML = "";
+    if (items.length === 0) {
+      var empty = document.createElement("li");
+      empty.style.cssText = "color:var(--ink-faint); font-size:13.5px; background:none; border:none; padding:6px 2px;";
+      empty.textContent = "Nog niks toegevoegd.";
+      foutList.appendChild(empty);
+      return;
+    }
+    items.forEach(function(item, idx){
+      var li = document.createElement("li");
+      li.className = "agenda-item fout-item" + (item.done ? " done" : "");
+      var span = document.createElement("span");
+      span.className = "fout-text";
+      span.textContent = item.text;
+      span.addEventListener("click", function(){
+        var all = loadFouten();
+        all[idx].done = !all[idx].done;
+        saveFouten(all);
+        renderFouten();
+      });
+      li.appendChild(span);
+
+      var delBtn = document.createElement("button");
+      delBtn.type = "button";
+      delBtn.className = "agenda-del";
+      delBtn.setAttribute("aria-label", "Verwijder");
+      delBtn.textContent = "×";
+      delBtn.addEventListener("click", function(ev){
+        ev.stopPropagation();
+        var all = loadFouten();
+        all.splice(idx, 1);
+        saveFouten(all);
+        renderFouten();
+      });
+      li.appendChild(delBtn);
+      foutList.appendChild(li);
+    });
+  }
+
+  function addFout(){
+    var text = foutInput.value.trim();
+    if (!text) { foutInput.focus(); return; }
+    var items = loadFouten();
+    items.push({ text: text, done: false });
+    saveFouten(items);
+    foutInput.value = "";
+    renderFouten();
+  }
+
+  foutAddBtn.addEventListener("click", addFout);
+  foutInput.addEventListener("keydown", function(e){
+    if (e.key === "Enter") { e.preventDefault(); addFout(); }
+  });
+
+  renderFouten();
+
+  /* ---------------- QUICK NOTES ---------------- */
+  var notesArea = document.getElementById("notes-area");
+  var notesStatus = document.getElementById("notes-status");
+  var NOTES_KEY = "notes";
+  var saveTimeout = null;
+
+  var savedNotes = cloudGet(NOTES_KEY, null);
+  if (savedNotes !== null) notesArea.value = savedNotes;
+
+  notesArea.addEventListener("input", function(){
+    notesStatus.textContent = "Bezig met opslaan...";
+    clearTimeout(saveTimeout);
+    saveTimeout = setTimeout(function(){
+      cloudSet(NOTES_KEY, notesArea.value);
+      notesStatus.textContent = "Opgeslagen ✓";
+      setTimeout(function(){ notesStatus.textContent = ""; }, 1500);
+    }, 400);
+  });
+
+  /* ---------------- AANKOMENDE AFSPRAKEN (synced + handmatig) ---------------- */
+  var AGENDA_MANUAL_KEY = "agendaManual";
+  var AGENDA_JSON_PATH = "agenda.json"; // zelfde bestand als de andere vakpagina's, gevuld door de gedeelde GitHub Action
+  var agendaTitel = document.getElementById("agenda-titel");
+  var agendaDatum = document.getElementById("agenda-datum");
+  var agendaAddBtn = document.getElementById("agenda-add");
+  var agendaList = document.getElementById("agenda-list");
+  var agendaUpdated = document.getElementById("agenda-updated");
+  var agendaRefreshBtn = document.getElementById("agenda-refresh");
+
+  var syncedEvents = [];
+  var syncedAt = null;
+
+  function loadManual(){
+    return cloudGet(AGENDA_MANUAL_KEY, []);
+  }
+
+  function saveManual(items){
+    cloudSet(AGENDA_MANUAL_KEY, items);
+  }
+
+  function formatDate(iso){
+    if (!iso) return "";
+    var parts = iso.split("-");
+    if (parts.length !== 3) return iso;
+    return parts[2] + "-" + parts[1] + "-" + parts[0];
+  }
+
+  function timeAgo(isoString){
+    if (!isoString) return null;
+    var then = new Date(isoString).getTime();
+    if (isNaN(then)) return null;
+    var diffMs = Date.now() - then;
+    var mins = Math.round(diffMs / 60000);
+    if (mins < 1) return "zojuist";
+    if (mins < 60) return mins + " min geleden";
+    var hrs = Math.round(mins / 60);
+    if (hrs < 24) return hrs + " uur geleden";
+    var days = Math.round(hrs / 24);
+    return days + " dag" + (days === 1 ? "" : "en") + " geleden";
+  }
+
+  function renderAgenda(){
+    var manual = loadManual();
+    var combined = [];
+
+    syncedEvents.forEach(function(ev){
+      combined.push({ title: ev.title, date: ev.date, time: ev.time || null, source: "sync" });
+    });
+    manual.forEach(function(item, idx){
+      combined.push({ title: item.title, date: item.date, time: null, source: "manual", manualIndex: idx });
+    });
+
+    combined.sort(function(a, b){
+      if (!a.date) return 1;
+      if (!b.date) return -1;
+      return (a.date + (a.time || "")).localeCompare(b.date + (b.time || ""));
+    });
+
+    agendaList.innerHTML = "";
+    combined.forEach(function(item){
+      var li = document.createElement("li");
+      li.className = "agenda-item";
+      var dateLabel = item.date ? formatDate(item.date) : "Geen datum";
+      if (item.time) dateLabel += " · " + item.time;
+
+      li.innerHTML =
+        '<span class="agenda-info">' +
+          '<span class="agenda-title"></span>' +
+          '<span class="agenda-date"></span>' +
+        '</span>';
+      li.querySelector(".agenda-title").textContent = item.title;
+      li.querySelector(".agenda-date").textContent = dateLabel;
+
+      if (item.source === "manual") {
+        var delBtn = document.createElement("button");
+        delBtn.type = "button";
+        delBtn.className = "agenda-del";
+        delBtn.setAttribute("aria-label", "Verwijder");
+        delBtn.textContent = "×";
+        delBtn.addEventListener("click", function(){
+          var current = loadManual();
+          current.splice(item.manualIndex, 1);
+          saveManual(current);
+          renderAgenda();
+        });
+        li.appendChild(delBtn);
+      } else {
+        var badge = document.createElement("span");
+        badge.className = "agenda-badge";
+        badge.textContent = "Agenda";
+        li.appendChild(badge);
+      }
+
+      agendaList.appendChild(li);
+    });
+  }
+
+  function addManualItem(){
+    var title = agendaTitel.value.trim();
+    if (!title) { agendaTitel.focus(); return; }
+    var items = loadManual();
+    items.push({ title: title, date: agendaDatum.value });
+    saveManual(items);
+    agendaTitel.value = "";
+    agendaDatum.value = "";
+    renderAgenda();
+  }
+
+  agendaAddBtn.addEventListener("click", addManualItem);
+  agendaTitel.addEventListener("keydown", function(e){
+    if (e.key === "Enter") { e.preventDefault(); addManualItem(); }
+  });
+
+  function updateStatusLabel(){
+    if (!syncedAt) {
+      agendaUpdated.textContent = "Nog niet gesynchroniseerd — wacht tot de GitHub Action voor het eerst gedraaid heeft.";
+      agendaUpdated.classList.remove("err");
+      return;
+    }
+    agendaUpdated.textContent = "Laatst bijgewerkt: " + timeAgo(syncedAt);
+    agendaUpdated.classList.remove("err");
+  }
+
+  function fetchAgendaJson(showSpinner){
+    if (showSpinner) agendaRefreshBtn.classList.add("spinning");
+    fetch(AGENDA_JSON_PATH + "?t=" + Date.now())
+      .then(function(res){
+        if (!res.ok) throw new Error("agenda.json niet gevonden (status " + res.status + ")");
+        return res.json();
+      })
+      .then(function(data){
+        syncedEvents = Array.isArray(data.events) ? data.events : [];
+        syncedAt = data.generated_at || null;
+        updateStatusLabel();
+        renderAgenda();
+      })
+      .catch(function(err){
+        agendaUpdated.textContent = "Kon agenda.json niet laden (bestaat 'ie al in je repo?).";
+        agendaUpdated.classList.add("err");
+        renderAgenda();
+      })
+      .finally(function(){
+        if (showSpinner) agendaRefreshBtn.classList.remove("spinning");
+      });
+  }
+
+  agendaRefreshBtn.addEventListener("click", function(){
+    fetchAgendaJson(true);
+  });
+
+  fetchAgendaJson(false);
+
+
+  /* ---------------- AI ASSISTENT (Gemini) ---------------- */
+  var WORKER_URL = "https://studiehub-gemini-proxy.parkerbergman10.workers.dev";
+  var ALLOWED_HOST = "wiskunde-schrift.github.io";
+
+  var aiWidget = document.getElementById("ai-widget");
+  var aiBubble = document.getElementById("ai-bubble");
+  var aiCloseBtn = document.getElementById("ai-close-btn");
+  var aiMessagesEl = document.getElementById("ai-messages");
+  var aiForm = document.getElementById("ai-form");
+  var aiInput = document.getElementById("ai-input");
+
+  var aiHistory = []; // { role: "user"|"model", parts: [{text}] }
+
+  function aiOpenPanel(){
+    aiWidget.classList.add("open");
+    setTimeout(function(){ aiInput.focus(); }, 420);
+  }
+  function aiClosePanel(){
+    aiWidget.classList.remove("open");
+  }
+
+  aiBubble.addEventListener("click", aiOpenPanel);
+  aiCloseBtn.addEventListener("click", aiClosePanel);
+
+  function aiAddMessage(text, who){
+    var div = document.createElement("div");
+    div.className = "ai-msg " + (who === "user" ? "ai-msg-user" : "ai-msg-bot");
+    div.textContent = text;
+    aiMessagesEl.appendChild(div);
+    aiMessagesEl.scrollTop = aiMessagesEl.scrollHeight;
+    return div;
+  }
+
+  function aiAddTyping(){
+    var div = document.createElement("div");
+    div.className = "ai-msg ai-msg-bot ai-typing";
+    div.innerHTML = "<span></span><span></span><span></span>";
+    aiMessagesEl.appendChild(div);
+    aiMessagesEl.scrollTop = aiMessagesEl.scrollHeight;
+    return div;
+  }
+
+  function buildAiContext(){
+    var context = "Je bent een behulpzame Nederlands-studieassistent voor een middelbare scholier (5G, VWO). Antwoord kort, duidelijk en in het Nederlands, tenzij om een andere taal wordt gevraagd.";
+    try {
+      var fouten = (typeof loadFouten === "function") ? loadFouten() : [];
+      var openFouten = fouten.filter(function(f){ return !f.done; }).map(function(f){ return f.text; });
+      if (openFouten.length){
+        context += "\n\nDe leerling heeft deze openstaande vragen/fouten in zijn foutenlogboek voor Nederlands staan. Gebruik dit om gerichter te helpen en wijs er proactief naar als het relevant is voor de vraag:\n- " + openFouten.join("\n- ");
+      }
+    } catch(e){}
+    try {
+      var notes = (typeof cloudGet === "function" && typeof NOTES_KEY !== "undefined") ? cloudGet(NOTES_KEY, "") : "";
+      if (notes && notes.trim()){
+        context += "\n\nDe leerling heeft deze quick notes voor Nederlands:\n" + notes.trim();
+      }
+    } catch(e){}
+    return context;
+  }
+
+  function askAi(question){
+    if (window.location.hostname !== ALLOWED_HOST){
+      aiAddMessage("De assistent werkt alleen op de officiële studiehub-website.", "bot");
+      return;
+    }
+
+    aiHistory.push({ role: "user", parts: [{ text: question }] });
+
+    var typingEl = aiAddTyping();
+
+    fetch(WORKER_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contents: aiHistory,
+        systemInstruction: { parts: [{ text: buildAiContext() }] }
+      })
+    })
+      .then(function(res){ return res.json(); })
+      .then(function(data){
+        typingEl.remove();
+        var reply = "Sorry, ik kon geen antwoord genereren.";
+        if (data && data.candidates && data.candidates.length &&
+            data.candidates[0].content && data.candidates[0].content.parts &&
+            data.candidates[0].content.parts.length){
+          reply = data.candidates[0].content.parts.map(function(p){ return p.text || ""; }).join("");
+        } else if (data && data.error && data.error.message){
+          reply = "Fout: " + data.error.message;
+        }
+        aiAddMessage(reply, "bot");
+        aiHistory.push({ role: "model", parts: [{ text: reply }] });
+      })
+      .catch(function(err){
+        typingEl.remove();
+        aiAddMessage("Er ging iets mis met de verbinding. Probeer het opnieuw.", "bot");
+      });
+  }
+
+  aiForm.addEventListener("submit", function(e){
+    e.preventDefault();
+    var val = aiInput.value.trim();
+    if (!val) return;
+    aiAddMessage(val, "user");
+    aiInput.value = "";
+    askAi(val);
+  });
+
+})();
+</script>
+
+  <style>
+    .ai-widget{
+      position:fixed;
+      left:16px;
+      bottom:16px;
+      z-index:9999;
+      font-family:var(--font-body);
+      color:var(--ink);
+      padding-bottom:env(safe-area-inset-bottom, 0px);
+    }
+    .ai-shell{
+      position:relative;
+      width:52px; height:52px;
+      border-radius:50%;
+      border:1.5px solid color-mix(in srgb, var(--accent) 40%, var(--card-border));
+      background:var(--card);
+      overflow:hidden;
+      box-shadow:0 3px 8px rgba(0,0,0,.5), 0 24px 48px -14px rgba(0,0,0,.85);
+      transition:
+        width .42s cubic-bezier(.16,1,.3,1),
+        height .42s cubic-bezier(.16,1,.3,1),
+        border-radius .42s cubic-bezier(.16,1,.3,1),
+        border-color .2s var(--ease),
+        box-shadow .3s var(--ease);
+    }
+    .ai-shell:hover{border-color:color-mix(in srgb, var(--accent) 65%, var(--card-border));}
+    .ai-widget.open .ai-shell{
+      width:300px;
+      max-width:calc(100vw - 32px);
+      height:min(420px, 70vh);
+      border-radius:var(--radius);
+      box-shadow:0 20px 50px rgba(0,0,0,.55), 0 4px 12px rgba(0,0,0,.4);
+    }
+
+    .ai-bubble{
+      position:absolute; inset:0;
+      display:flex; align-items:center; justify-content:center;
+      width:100%; height:100%;
+      border:none; background:none;
+      color:var(--ink);
+      cursor:pointer;
+      transition:opacity .18s ease, transform .18s ease;
+    }
+    .ai-shell:hover .ai-bubble{transform:scale(1.06);}
+    .ai-widget.open .ai-bubble{
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .12s ease;
+    }
+
+    .ai-panel{
+      position:absolute; inset:0;
+      display:flex;
+      flex-direction:column;
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .22s ease .16s;
+    }
+    .ai-widget.open .ai-panel{
+      opacity:1;
+      pointer-events:auto;
+    }
+
+    .ai-panel-header{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:12px 14px;
+      border-bottom:1px solid var(--card-border);
+      font-size:13px; font-weight:600;
+    }
+    .ai-close{
+      background:none; border:none; color:var(--ink-faint);
+      font-size:14px; cursor:pointer; padding:4px;
+      border-radius:6px;
+    }
+    .ai-close:hover{color:var(--ink); background:var(--bg-alt);}
+
+    .ai-messages{
+      flex:1;
+      overflow-y:auto;
+      padding:12px 14px;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .ai-msg{
+      max-width:85%;
+      padding:8px 11px;
+      border-radius:12px;
+      font-size:13px;
+      line-height:1.4;
+      white-space:pre-wrap;
+    }
+    .ai-msg-bot{
+      align-self:flex-start;
+      background:var(--bg-alt);
+      border:1px solid var(--card-border);
+      color:var(--ink);
+      border-bottom-left-radius:4px;
+    }
+    .ai-msg-user{
+      align-self:flex-end;
+      background:var(--ink);
+      color:#0f0f11;
+      font-weight:500;
+      border-bottom-right-radius:4px;
+    }
+    .ai-typing{display:flex; align-items:center; gap:4px; padding:11px;}
+    .ai-typing span{
+      width:5px; height:5px; border-radius:50%;
+      background:var(--ink-faint);
+      animation:aityping 1s ease-in-out infinite;
+    }
+    .ai-typing span:nth-child(2){animation-delay:.15s;}
+    .ai-typing span:nth-child(3){animation-delay:.3s;}
+    @keyframes aityping{
+      0%,100%{opacity:.3; transform:translateY(0);}
+      50%{opacity:1; transform:translateY(-2px);}
+    }
+
+    .ai-input-row{
+      display:flex; gap:8px;
+      padding:10px;
+      border-top:1px solid var(--card-border);
+    }
+    .ai-input{
+      flex:1;
+      background:var(--bg-alt);
+      border:1px solid var(--card-border);
+      border-radius:var(--radius-sm);
+      color:var(--ink);
+      font-size:13px;
+      padding:9px 12px;
+      min-width:0;
+    }
+    .ai-input:focus{outline:none; border-color:var(--accent-line);}
+    .ai-send{
+      background:var(--ink);
+      color:#0f0f11;
+      border:none;
+      border-radius:var(--radius-sm);
+      width:36px;
+      font-size:14px;
+      cursor:pointer;
+      transition:opacity .15s var(--ease);
+    }
+    .ai-send:hover{opacity:.88;}
+  </style>
+
+  <!-- ---------------- AI ASSISTENT (Gemini) ---------------- -->
+  <div id="ai-widget" class="ai-widget">
+    <div class="ai-shell" id="ai-shell">
+    <button class="ai-bubble" id="ai-bubble" type="button" aria-label="Open AI-assistent"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5L18 18M18 6l-2.5 2.5M8.5 15.5L6 18"/></svg></button>
+
+    <div class="ai-panel" id="ai-panel">
+      <div class="ai-panel-header">
+        <span>Nederlands-assistent</span>
+        <button class="ai-close" id="ai-close-btn" type="button" aria-label="Sluiten">✕</button>
+      </div>
+      <div class="ai-messages" id="ai-messages">
+        <div class="ai-msg ai-msg-bot">Hoi! Waar kan ik je mee helpen bij Nederlands?</div>
+      </div>
+      <form class="ai-input-row" id="ai-form" autocomplete="off">
+        <input class="ai-input" id="ai-input" type="text" placeholder="Stel een vraag..." aria-label="Bericht">
+        <button class="ai-send" id="ai-send-btn" type="submit" aria-label="Verstuur">➤</button>
+      </form>
+    </div>
+    </div>
+  </div>
+
+  <!-- ---------------- FLOATING MINI PLAYER ---------------- -->
+  <div id="mini-player" class="mini-player">
+    <button class="mp-login" id="mp-login-btn" type="button">Log in met Spotify</button>
+
+    <!-- Collapsed: alleen hoes + play/pauze -->
+    <button class="mp-collapsed" id="mp-collapsed" type="button" aria-label="Open muziekspeler">
+      <img class="mp-art-sm" id="mp-art-sm" src="" alt="">
+      <div class="mp-bars mp-bars-sm" id="mp-bars-sm">
+        <span></span><span></span><span></span><span></span>
+      </div>
+      <span class="mp-mini-toggle" id="mp-mini-toggle">▶︎</span>
+      <span class="mp-live-dot" aria-hidden="true"></span>
+    </button>
+
+    <!-- Uitgeklapt: volledige bediening -->
+    <div class="mp-body" id="mp-body">
+      <div class="mp-art-wrap">
+        <img class="mp-art" id="mp-art" src="" alt="">
+        <div class="mp-bars" id="mp-bars">
+          <span></span><span></span><span></span><span></span>
+        </div>
+      </div>
+      <div class="mp-info">
+        <div class="mp-title" id="mp-title">—</div>
+        <div class="mp-artist" id="mp-artist">—</div>
+      </div>
+      <div class="mp-controls">
+        <button class="mp-btn" id="mp-shuffle-btn" type="button" aria-label="Shuffle" title="Shuffle">&#8646;</button>
+        <button class="mp-btn" id="mp-prev-btn" type="button" aria-label="Vorige" title="Vorige">⏮</button>
+        <button class="mp-btn mp-btn-main" id="mp-toggle-btn" type="button" aria-label="Afspelen" title="Afspelen/pauzeren">▶︎</button>
+        <button class="mp-btn" id="mp-next-btn" type="button" aria-label="Volgende" title="Volgende">⏭</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ================= CONFIG ================= */
+  var CLIENT_ID = "c0217c44e28f422494a5c0b26799daac";
+  var REDIRECT_URI = "https://wiskunde-schrift.github.io/Overzicht/index.html"; // moet exact overeenkomen met Spotify Dashboard
+  var PLAYLIST_URI = "spotify:playlist:37i9dQZF1EIgKXhXqo61vc";
+  var SCOPES = "streaming user-read-email user-read-private user-modify-playback-state user-read-playback-state";
+
+  var LS_VERIFIER = "spotify_pkce_verifier";
+  var LS_ACCESS_TOKEN = "spotify_access_token";
+  var LS_TOKEN_EXPIRES = "spotify_token_expires";
+  var LS_REFRESH_TOKEN = "spotify_refresh_token";
+
+  var miniPlayer = document.getElementById("mini-player");
+  var loginBtn = document.getElementById("mp-login-btn");
+  var collapsedBtn = document.getElementById("mp-collapsed");
+  var mpArtSm = document.getElementById("mp-art-sm");
+  var mpBarsSm = document.getElementById("mp-bars-sm");
+  var mpMiniToggle = document.getElementById("mp-mini-toggle");
+  var mpBody = document.getElementById("mp-body");
+  var mpArtWrap = document.querySelector(".mp-art-wrap");
+  var mpArt = document.getElementById("mp-art");
+  var mpTitle = document.getElementById("mp-title");
+  var mpArtist = document.getElementById("mp-artist");
+  var mpBars = document.getElementById("mp-bars");
+  var shuffleBtn = document.getElementById("mp-shuffle-btn");
+  var toggleBtn = document.getElementById("mp-toggle-btn");
+  var prevBtn = document.getElementById("mp-prev-btn");
+  var nextBtn = document.getElementById("mp-next-btn");
+
+  var player = null;
+  var deviceId = null;
+
+  /* ---------- PKCE helpers ---------- */
+  function generateRandomString(length){
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    var text = "";
+    var randomValues = crypto.getRandomValues(new Uint8Array(length));
+    for (var i = 0; i < length; i++){
+      text += possible[randomValues[i] % possible.length];
+    }
+    return text;
+  }
+
+  function sha256(plain){
+    var encoder = new TextEncoder();
+    var data = encoder.encode(plain);
+    return crypto.subtle.digest("SHA-256", data);
+  }
+
+  function base64urlencode(buffer){
+    var bytes = new Uint8Array(buffer);
+    var str = "";
+    for (var i = 0; i < bytes.byteLength; i++){
+      str += String.fromCharCode(bytes[i]);
+    }
+    return btoa(str).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  }
+
+  function redirectToSpotifyLogin(){
+    var verifier = generateRandomString(64);
+    sessionStorage.setItem(LS_VERIFIER, verifier);
+
+    sha256(verifier).then(function(hashed){
+      var challenge = base64urlencode(hashed);
+      var params = new URLSearchParams({
+        response_type: "code",
+        client_id: CLIENT_ID,
+        scope: SCOPES,
+        code_challenge_method: "S256",
+        code_challenge: challenge,
+        redirect_uri: REDIRECT_URI
+      });
+      window.location.href = "https://accounts.spotify.com/authorize?" + params.toString();
+    });
+  }
+
+  function exchangeCodeForToken(code){
+    var verifier = sessionStorage.getItem(LS_VERIFIER);
+    var body = new URLSearchParams({
+      client_id: CLIENT_ID,
+      grant_type: "authorization_code",
+      code: code,
+      redirect_uri: REDIRECT_URI,
+      code_verifier: verifier
+    });
+
+    return fetch("https://accounts.spotify.com/api/token", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: body
+    }).then(function(res){ return res.json(); })
+      .then(function(data){
+        if (data.access_token){
+          storeToken(data);
+        }
+        return data;
+      });
+  }
+
+  function refreshToken(){
+    var refresh = localStorage.getItem(LS_REFRESH_TOKEN);
+    if (!refresh) return Promise.reject("Geen refresh token");
+    var body = new URLSearchParams({
+      client_id: CLIENT_ID,
+      grant_type: "refresh_token",
+      refresh_token: refresh
+    });
+    return fetch("https://accounts.spotify.com/api/token", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: body
+    }).then(function(res){ return res.json(); })
+      .then(function(data){
+        if (data.access_token){
+          storeToken(data);
+        }
+        return data;
+      });
+  }
+
+  function storeToken(data){
+    localStorage.setItem(LS_ACCESS_TOKEN, data.access_token);
+    localStorage.setItem(LS_TOKEN_EXPIRES, String(Date.now() + (data.expires_in * 1000)));
+    if (data.refresh_token){
+      localStorage.setItem(LS_REFRESH_TOKEN, data.refresh_token);
+    }
+  }
+
+  function getValidToken(){
+    var token = localStorage.getItem(LS_ACCESS_TOKEN);
+    var expires = parseInt(localStorage.getItem(LS_TOKEN_EXPIRES) || "0", 10);
+    if (token && Date.now() < expires - 5000){
+      return Promise.resolve(token);
+    }
+    return refreshToken().then(function(){
+      return localStorage.getItem(LS_ACCESS_TOKEN);
+    });
+  }
+
+  /* ---------- UI states ---------- */
+  var isPlaying = false;
+  var isShuffled = false;
+  var startedOnce = false;
+  var idleTimer = null;
+
+  function showLoggedOut(){
+    miniPlayer.classList.remove("logged-in", "collapsed");
+    loginBtn.style.display = "block";
+  }
+
+  function showLoggedIn(){
+    loginBtn.style.display = "none";
+    miniPlayer.classList.add("logged-in", "collapsed"); // start ingeklapt
+  }
+
+  function expandPlayer(){
+    miniPlayer.classList.remove("collapsed");
+    resetIdleTimer();
+  }
+
+  function collapsePlayer(){
+    miniPlayer.classList.add("collapsed");
+    resetIdleTimer();
+  }
+
+  function setPlayingUI(playing){
+    isPlaying = playing;
+    var icon = playing ? "⏸" : "▶︎";
+    toggleBtn.textContent = icon;
+    mpMiniToggle.textContent = icon;
+    mpBars.classList.toggle("playing", playing);
+    mpBarsSm.classList.toggle("playing", playing);
+  }
+
+  function setShuffleUI(shuffled){
+    isShuffled = shuffled;
+    shuffleBtn.classList.toggle("active", shuffled);
+  }
+
+  function updateTrackInfo(track){
+    if (!track) return;
+    mpTitle.textContent = track.name || "—";
+    mpArtist.textContent = (track.artists || []).map(function(a){ return a.name; }).join(", ") || "—";
+    var art = track.album && track.album.images && track.album.images.length
+      ? track.album.images[track.album.images.length - 1].url
+      : "";
+    if (art){ mpArt.src = art; mpArtSm.src = art; }
+  }
+
+  /* ---------- Idle fade: valt rustig weg als je niks aanraakt ---------- */
+  function resetIdleTimer(){
+    miniPlayer.classList.remove("idle");
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(function(){
+      miniPlayer.classList.add("idle");
+    }, 4000);
+  }
+  ["mousemove","mouseenter","touchstart","click","focusin"].forEach(function(evt){
+    miniPlayer.addEventListener(evt, resetIdleTimer);
+  });
+
+  /* ---------- Handle redirect back from Spotify ---------- */
+  function handleRedirect(){
+    var params = new URLSearchParams(window.location.search);
+    var code = params.get("code");
+    if (code){
+      exchangeCodeForToken(code).then(function(){
+        // Verwijder ?code=... uit de URL
+        window.history.replaceState({}, document.title, window.location.pathname);
+        initPlayer();
+      });
+      return true;
+    }
+    return false;
+  }
+
+  /* ---------- Web Playback SDK ---------- */
+  window.onSpotifyWebPlaybackSDKReady = function(){
+    if (localStorage.getItem(LS_ACCESS_TOKEN)){
+      initPlayer();
+    }
+  };
+
+  function initPlayer(){
+    if (player) { showLoggedIn(); return; }
+
+    player = new Spotify.Player({
+      name: "Studiehub",
+      getOAuthToken: function(cb){
+        getValidToken().then(function(token){ cb(token); });
+      },
+      volume: 0.7
+    });
+
+    player.addListener("ready", function(data){
+      deviceId = data.device_id;
+      showLoggedIn();
+    });
+
+    player.addListener("player_state_changed", function(state){
+      if (!state) return;
+      setPlayingUI(!state.paused);
+      setShuffleUI(!!state.shuffle);
+      if (state.track_window && state.track_window.current_track){
+        updateTrackInfo(state.track_window.current_track);
+        startedOnce = true;
+      }
+    });
+
+    player.addListener("initialization_error", function(){ /* browser ondersteunt playback niet */ });
+    player.addListener("authentication_error", function(){ showLoggedOut(); });
+    player.addListener("account_error", function(){ /* Spotify Premium vereist */ });
+
+    player.connect();
+  }
+
+  function startPlaylist(){
+    if (!deviceId) return;
+    getValidToken().then(function(token){
+      fetch("https://api.spotify.com/v1/me/player/play?device_id=" + deviceId, {
+        method: "PUT",
+        headers: {
+          "Authorization": "Bearer " + token,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ context_uri: PLAYLIST_URI })
+      }).then(function(res){
+        if (res.status === 204 || res.ok){
+          startedOnce = true;
+          setPlayingUI(true);
+        }
+      });
+    });
+  }
+
+  function togglePlayback(){
+    if (!startedOnce){
+      startPlaylist();
+      return;
+    }
+    if (!player) return;
+    player.togglePlay();
+  }
+
+  function nextTrack(){
+    getValidToken().then(function(token){
+      fetch("https://api.spotify.com/v1/me/player/next?device_id=" + deviceId, {
+        method: "POST",
+        headers: { "Authorization": "Bearer " + token }
+      });
+    });
+  }
+
+  function prevTrack(){
+    getValidToken().then(function(token){
+      fetch("https://api.spotify.com/v1/me/player/previous?device_id=" + deviceId, {
+        method: "POST",
+        headers: { "Authorization": "Bearer " + token }
+      });
+    });
+  }
+
+  function toggleShuffle(){
+    var newState = !isShuffled;
+    getValidToken().then(function(token){
+      fetch("https://api.spotify.com/v1/me/player/shuffle?state=" + newState + "&device_id=" + deviceId, {
+        method: "PUT",
+        headers: { "Authorization": "Bearer " + token }
+      }).then(function(){ setShuffleUI(newState); });
+    });
+  }
+
+  loginBtn.addEventListener("click", redirectToSpotifyLogin);
+  toggleBtn.addEventListener("click", togglePlayback);
+  prevBtn.addEventListener("click", prevTrack);
+  nextBtn.addEventListener("click", nextTrack);
+  shuffleBtn.addEventListener("click", toggleShuffle);
+
+  collapsedBtn.addEventListener("click", function(e){
+    e.stopPropagation();
+    expandPlayer();
+  });
+
+  // Klik buiten de uitgeklapte speler -> weer inklappen
+  document.addEventListener("click", function(e){
+    if (!miniPlayer.classList.contains("logged-in")) return;
+    if (miniPlayer.classList.contains("collapsed")) return;
+    if (!miniPlayer.contains(e.target)) collapsePlayer();
+  });
+
+  mpArtWrap.addEventListener("click", togglePlayback);
+  resetIdleTimer();
+
+  if (!handleRedirect()){
+    if (localStorage.getItem(LS_ACCESS_TOKEN)){
+      showLoggedIn();
+    } else {
+      showLoggedOut();
+    }
+  }
+
+})();
+</script>
+
+  <style>
+    .mini-player{
+      position:fixed;
+      right:16px;
+      bottom:16px;
+      z-index:9999;
+      font-family:var(--font-body);
+      color:var(--ink);
+      max-width:260px;
+      padding-bottom:env(safe-area-inset-bottom, 0px);
+      transition:opacity .5s var(--ease);
+      opacity:1;
+    }
+    .mini-player.idle{opacity:.28;}
+    .mini-player.idle:hover,
+    .mini-player.idle:focus-within{opacity:1;}
+
+    .mp-login{
+      background:var(--ink);
+      color:#0f0f11;
+      border:none;
+      border-radius:var(--radius-sm);
+      padding:10px 14px;
+      font-size:13px;
+      font-weight:600;
+      cursor:pointer;
+      transition:opacity .15s var(--ease), transform .15s var(--ease);
+      box-shadow:0 3px 8px rgba(0,0,0,.5), 0 24px 48px -14px rgba(0,0,0,.85);
+    }
+    .mp-login:hover{opacity:.88; transform:translateY(-1px);}
+
+    @keyframes mpPopIn{
+      from{opacity:0; transform:scale(.82);}
+      to{opacity:1; transform:scale(1);}
+    }
+
+    /* ---- Collapsed bubble (hoes + play/pauze) ---- */
+    .mp-collapsed{
+      display:none;
+      align-items:center;
+      justify-content:center;
+      position:relative;
+      width:52px; height:52px;
+      border-radius:50%;
+      padding:0;
+      border:1px solid var(--card-border);
+      background:var(--card);
+      box-shadow:0 3px 8px rgba(0,0,0,.5), 0 24px 48px -14px rgba(0,0,0,.85);
+      cursor:pointer;
+      overflow:hidden;
+      transition:border-color .25s var(--ease), box-shadow .25s var(--ease), transform .15s var(--ease);
+    }
+    .mp-collapsed:hover{transform:translateY(-1px) scale(1.03);}
+    .mini-player.logged-in.collapsed .mp-collapsed{
+      display:flex;
+      animation:mpPopIn .3s var(--ease);
+    }
+    .mp-collapsed:has(.mp-bars-sm.playing){
+      border-color:color-mix(in srgb, var(--ok) 55%, var(--card-border));
+      box-shadow:0 8px 28px rgba(0,0,0,.45), 0 0 0 3px color-mix(in srgb, var(--ok) 18%, transparent);
+      animation:mpPopIn .3s var(--ease), mpGlow 2.4s ease-in-out infinite;
+    }
+    @keyframes mpGlow{
+      0%,100%{box-shadow:0 8px 28px rgba(0,0,0,.45), 0 0 0 3px color-mix(in srgb, var(--ok) 14%, transparent);}
+      50%{box-shadow:0 8px 28px rgba(0,0,0,.45), 0 0 0 5px color-mix(in srgb, var(--ok) 26%, transparent);}
+    }
+    .mp-live-dot{
+      position:absolute;
+      top:3px; right:3px;
+      width:8px; height:8px;
+      border-radius:50%;
+      background:var(--ok);
+      border:1.5px solid var(--card);
+      opacity:0;
+      transition:opacity .2s var(--ease);
+    }
+    .mp-collapsed:has(.mp-bars-sm.playing) .mp-live-dot{opacity:1;}
+    .mp-art-sm{
+      width:100%; height:100%;
+      object-fit:cover;
+      background:var(--bg-alt);
+      display:block;
+      transition:transform .3s var(--ease);
+    }
+    .mp-collapsed:hover .mp-art-sm{transform:scale(1.08);}
+    .mp-mini-toggle{
+      position:absolute; inset:0;
+      display:flex; align-items:center; justify-content:center;
+      font-size:16px;
+      background:rgba(15,15,17,.35);
+      opacity:0;
+      transition:opacity .2s var(--ease);
+    }
+    .mp-collapsed:hover .mp-mini-toggle{opacity:1;}
+    .mp-bars-sm{
+      position:absolute; inset:0;
+      display:none;
+      align-items:flex-end;
+      justify-content:center;
+      gap:2px;
+      background:rgba(15,15,17,.3);
+    }
+    .mp-bars-sm.playing{display:flex;}
+
+    /* ---- Expanded card ---- */
+    .mp-body{
+      display:none;
+      align-items:center; gap:10px;
+      background:var(--card);
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:0 3px 8px rgba(0,0,0,.5), 0 24px 48px -14px rgba(0,0,0,.85);
+      padding:10px;
+    }
+    .mini-player.logged-in:not(.collapsed) .mp-body{
+      display:flex;
+      animation:mpPopIn .3s var(--ease);
+    }
+
+    .mp-art-wrap{position:relative; flex-shrink:0; width:46px; height:46px; cursor:pointer; border-radius:8px; overflow:hidden;}
+    .mp-art{
+      width:46px; height:46px;
+      border-radius:8px;
+      object-fit:cover;
+      background:var(--bg-alt);
+      border:1px solid var(--card-border);
+      display:block;
+      transition:transform .35s var(--ease);
+    }
+    .mp-art-wrap:hover .mp-art{transform:scale(1.08) rotate(-2deg);}
+    .mp-bars{
+      position:absolute; inset:0;
+      display:none;
+      align-items:flex-end;
+      justify-content:center;
+      gap:3px;
+      background:rgba(15,15,17,.5);
+      border-radius:8px;
+    }
+    .mp-bars.playing{display:flex;}
+    .mp-bars span, .mp-bars-sm span{
+      width:3px;
+      background:var(--ink);
+      border-radius:2px;
+      height:5px;
+      animation:mpwave 2.6s ease-in-out infinite;
+    }
+    .mp-bars-sm span{width:2.5px;}
+    .mp-bars span:nth-child(1),.mp-bars-sm span:nth-child(1){animation-delay:0s;}
+    .mp-bars span:nth-child(2),.mp-bars-sm span:nth-child(2){animation-delay:.5s;}
+    .mp-bars span:nth-child(3),.mp-bars-sm span:nth-child(3){animation-delay:1s;}
+    .mp-bars span:nth-child(4),.mp-bars-sm span:nth-child(4){animation-delay:.25s;}
+    @keyframes mpwave{
+      0%,100%{height:4px;}
+      50%{height:11px;}
+    }
+    .mp-info{min-width:0; flex:1; cursor:default;}
+    .mp-title{
+      font-size:12.5px; font-weight:600;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .mp-artist{
+      font-size:11px; color:var(--ink-faint);
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .mp-controls{display:flex; align-items:center; gap:0; flex-shrink:0;}
+    .mp-btn{
+      background:none; border:none; color:var(--ink);
+      font-size:14px; cursor:pointer; padding:6px;
+      border-radius:8px;
+      transition:background .15s var(--ease), opacity .15s var(--ease), transform .1s var(--ease);
+    }
+    .mp-btn:hover{background:var(--bg-alt);}
+    .mp-btn:active{transform:scale(.9);}
+    .mp-btn-main{
+      font-size:16px;
+      background:var(--bg-alt);
+      border:1px solid var(--card-border);
+    }
+    .mp-btn-main:hover{border-color:var(--card-border-hover);}
+    .mp-btn.active{opacity:1; color:var(--ok);}
+    #mp-shuffle-btn{opacity:.55;}
+    #mp-shuffle-btn.active{opacity:1;}
+    @media (prefers-reduced-motion: reduce){
+      .mp-bars span, .mp-bars-sm span{animation:none; height:8px;}
+    }
+  </style>
+</body>
+</html>

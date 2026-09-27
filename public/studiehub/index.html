@@ -1,0 +1,1593 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Parker Bergman · Studiehub</title>
+<meta name="description" content="Studiehub — Parker Bergman, 5G">
+<style>
+  :root{
+    --bg:#0f0f11;
+    --bg-alt:#151517;
+    --card:#1e1e24;
+    --card-border:#2c2c34;
+    --card-border-hover:#3c3c46;
+    --ink:#f2f2f4;
+    --ink-dim:#a6a6b0;
+    --ink-faint:#6c6c78;
+    --accent:#eaeaea;
+    --accent-soft:#eaeaea1a;
+    --accent-line:#eaeaea55;
+    --danger:#e05d5d;
+    --ok:#4fbf7d;
+    --radius:16px;
+    --radius-sm:10px;
+    --font-display: "Iowan Old Style","Palatino Linotype","Georgia",ui-serif,serif;
+    --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-mono: "SF Mono", "Cascadia Code", "Roboto Mono", Consolas, monospace;
+    --ease: cubic-bezier(.16,1,.3,1);
+  }
+
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(1200px 600px at 50% -10%, #1c1c22 0%, var(--bg) 55%),
+      var(--bg);
+    color:var(--ink);
+    font-family:var(--font-body);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    min-height:100dvh;
+  }
+  a{color:inherit;}
+  :focus-visible{outline:2px solid var(--accent); outline-offset:3px; border-radius:6px;}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important;}
+  }
+
+  .wrap{max-width:820px; margin:0 auto; padding:0 20px 80px;}
+
+  .hero{
+    padding:56px 20px 40px;
+    border-bottom:1px solid var(--card-border);
+    margin-bottom:36px;
+  }
+  .hero-inner{max-width:820px; margin:0 auto;}
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:12px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+    margin:0 0 14px;
+  }
+  h1.name{
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:clamp(32px, 7vw, 52px);
+    letter-spacing:-0.01em;
+    margin:0 0 6px;
+    color:var(--ink);
+  }
+  .meta-row{
+    display:flex; flex-direction:column; gap:3px;
+  }
+  .meta-row .byline{font-size:14.5px; color:var(--ink-dim);}
+  .meta-row a{
+    font-size:13px; color:var(--ink-faint);
+    text-decoration:underline; text-decoration-color:var(--card-border-hover); text-underline-offset:3px;
+    width:fit-content;
+  }
+  .meta-row a:hover{color:var(--ink-dim); text-decoration-color:var(--ink-dim);}
+
+  /* ---------------- PIN GATE ---------------- */
+  .pin-card{
+    background:var(--card);
+    border:1px solid var(--card-border);
+    border-radius:var(--radius);
+    padding:26px 24px;
+    max-width:420px;
+    margin-top:30px;
+  }
+  .pin-card p{
+    margin:0 0 16px;
+    font-size:14px;
+    color:var(--ink-dim);
+  }
+  .pin-form{display:flex; gap:10px;}
+  .pin-input{
+    flex:1;
+    background:var(--bg-alt);
+    border:1px solid var(--card-border);
+    border-radius:var(--radius-sm);
+    color:var(--ink);
+    font-family:var(--font-mono);
+    font-size:20px;
+    letter-spacing:.3em;
+    text-align:center;
+    padding:12px 10px;
+    min-width:0;
+    transition:border-color .2s var(--ease);
+  }
+  .pin-input:focus{border-color:var(--accent-line);}
+  .pin-submit{
+    background:var(--ink);
+    color:#0f0f11;
+    border:none;
+    border-radius:var(--radius-sm);
+    padding:0 20px;
+    font-weight:600;
+    font-size:14px;
+    cursor:pointer;
+    transition:transform .15s var(--ease), opacity .15s var(--ease);
+  }
+  .pin-submit:hover{opacity:.88;}
+  .pin-submit:active{transform:scale(.97);}
+  .pin-error{
+    margin-top:12px;
+    font-size:13px;
+    color:var(--danger);
+    min-height:16px;
+    opacity:0;
+    transition:opacity .2s var(--ease);
+  }
+  .pin-error.show{opacity:1;}
+  .pin-error.shake{animation:shake .35s var(--ease);}
+  @keyframes shake{
+    20%{transform:translateX(-6px);}
+    40%{transform:translateX(5px);}
+    60%{transform:translateX(-3px);}
+    80%{transform:translateX(2px);}
+    100%{transform:translateX(0);}
+  }
+
+  /* ---------------- DASHBOARD ---------------- */
+  #dashboard{display:none;}
+  #dashboard.visible{
+    display:block;
+    animation:dashboardIn .6s cubic-bezier(.16,1,.3,1);
+  }
+  @keyframes dashboardIn{
+    from{opacity:0; transform:translateY(24px) scale(.97); filter:blur(6px);}
+    to{opacity:1; transform:translateY(0) scale(1); filter:blur(0);}
+  }
+
+  .pin-card.unlocking{
+    animation:pinOut .38s cubic-bezier(.5,0,.75,0) forwards;
+    pointer-events:none;
+  }
+  @keyframes pinOut{
+    from{opacity:1; transform:scale(1) translateY(0); filter:blur(0);}
+    to{opacity:0; transform:scale(.92) translateY(-10px); filter:blur(4px);}
+  }
+
+  /* Vaktegels komen gestaffeld 'van achteren naar voren' zweven */
+  .tile-grid .tile{
+    animation:tileIn .5s cubic-bezier(.16,1,.3,1) both;
+  }
+  .tile-grid .tile:nth-child(1){animation-delay:.08s;}
+  .tile-grid .tile:nth-child(2){animation-delay:.14s;}
+  .tile-grid .tile:nth-child(3){animation-delay:.20s;}
+  .tile-grid .tile:nth-child(4){animation-delay:.26s;}
+  .tile-grid .tile:nth-child(5){animation-delay:.32s;}
+  @keyframes tileIn{
+    from{opacity:0; transform:translateY(16px) scale(.96);}
+    to{opacity:1; transform:translateY(0) scale(1);}
+  }
+
+  /* ---------------- SETTINGS GEAR + DRAWER ---------------- */
+  .gear-btn{
+    position:fixed;
+    top:18px;
+    right:18px;
+    width:40px; height:40px;
+    display:flex; align-items:center; justify-content:center;
+    background:var(--card);
+    border:1px solid var(--card-border);
+    border-radius:50%;
+    color:var(--ink-dim);
+    font-size:18px;
+    cursor:pointer;
+    z-index:40;
+    transition:border-color .2s var(--ease), color .2s var(--ease), transform .15s var(--ease);
+  }
+  .gear-btn:hover{border-color:var(--card-border-hover); color:var(--ink); transform:rotate(25deg);}
+
+  .settings-backdrop{
+    position:fixed; inset:0;
+    background:rgba(0,0,0,.5);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .25s var(--ease);
+    z-index:45;
+  }
+  .settings-backdrop.open{opacity:1; pointer-events:auto;}
+
+  .settings-drawer{
+    position:fixed;
+    top:0; right:0;
+    height:100dvh;
+    width:33.333vw;
+    min-width:280px;
+    max-width:420px;
+    background:var(--bg-alt);
+    border-left:1px solid var(--card-border);
+    box-shadow:-4px 0 12px rgba(0,0,0,.4), -40px 0 80px rgba(0,0,0,.7);
+    transform:translateX(100%);
+    transition:transform .3s var(--ease);
+    z-index:46;
+    padding:24px 22px;
+    overflow-y:auto;
+  }
+  .settings-drawer.open{transform:translateX(0);}
+  .settings-drawer-head{
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom:22px;
+  }
+  .settings-drawer-head h2{
+    font-family:var(--font-display);
+    font-size:20px;
+    font-weight:600;
+    margin:0;
+    color:var(--ink);
+  }
+  .settings-close{
+    background:none;
+    border:1px solid var(--card-border);
+    border-radius:8px;
+    width:32px; height:32px;
+    color:var(--ink-dim);
+    font-size:16px;
+    line-height:1;
+    cursor:pointer;
+    transition:border-color .2s var(--ease), color .2s var(--ease);
+  }
+  .settings-close:hover{border-color:var(--card-border-hover); color:var(--ink);}
+
+  @media(max-width:680px){
+    .settings-drawer{width:85vw; min-width:0;}
+  }
+
+  /* ---------------- QUICK LINKS (Instellingen) ---------------- */
+  .link-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:12px;
+  }
+  .link-btn{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    background:var(--card);
+    border:1px solid var(--card-border);
+    border-radius:var(--radius-sm);
+    padding:16px 18px;
+    text-decoration:none;
+    color:var(--ink);
+    transition:border-color .2s var(--ease), transform .15s var(--ease), background .2s var(--ease);
+  }
+  .link-btn:hover{border-color:var(--card-border-hover); background:var(--bg-alt); transform:translateY(-1px);}
+  .link-btn .lbl{font-weight:600; font-size:14.5px;}
+  .link-btn .sub{display:block; font-size:12px; color:var(--ink-faint); margin-top:2px; font-weight:400;}
+  .link-btn .arrow{color:var(--ink-faint); font-size:16px; flex-shrink:0;}
+
+  .section-label{
+    font-family:var(--font-body);
+    font-size:13.5px;
+    font-weight:600;
+    color:var(--ink-dim);
+    margin:0 0 14px;
+    padding-left:10px;
+    border-left:2px solid color-mix(in srgb, var(--accent) 55%, var(--card-border));
+  }
+
+
+  .tile-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:12px;
+  }
+  @media(min-width:560px){
+    .tile-grid{grid-template-columns:1fr 1fr;}
+  }
+
+  .tile{
+    display:flex; align-items:center; gap:16px;
+    background:var(--card);
+    border:1px solid var(--card-border);
+    border-radius:var(--radius);
+    padding:20px;
+    text-decoration:none;
+    color:var(--ink);
+    transition:border-color .2s var(--ease), transform .15s var(--ease), background .2s var(--ease);
+  }
+  a.tile:hover{
+    border-color:var(--tile-color, var(--card-border-hover));
+    background:var(--bg-alt);
+    transform:translateY(-2px);
+  }
+  .tile-icon{
+    width:44px; height:44px; flex-shrink:0;
+    border-radius:12px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:20px;
+    color:var(--tile-color, var(--ink));
+    background:color-mix(in srgb, var(--tile-color, var(--ink)) 16%, var(--bg-alt));
+    border:1px solid color-mix(in srgb, var(--tile-color, var(--ink)) 35%, var(--card-border));
+  }
+  .tile-body{min-width:0; flex:1;}
+  .tile-title{font-weight:600; font-size:15.5px; margin-bottom:2px;}
+  .tile-sub{font-size:12.5px; color:var(--ink-faint);}
+  .tile-arrow{color:var(--ink-faint); font-size:17px; flex-shrink:0;}
+
+  .tile.soon{
+    opacity:.5;
+    cursor:default;
+  }
+  .tile.soon .tile-sub em{font-style:normal; color:var(--ink-faint);}
+
+  footer{
+    text-align:center;
+    font-size:12px;
+    color:var(--ink-faint);
+    padding:30px 20px 10px;
+  }
+
+  @media(max-width:480px){
+    .hero{padding:44px 16px 32px;}
+  }
+
+  /* ================= DIEPTE: schaduwlagen voor voor/achter-gevoel ================= */
+  .pin-card{
+    box-shadow:
+      0 2px 4px rgba(0,0,0,.5),
+      0 30px 60px -16px rgba(0,0,0,.85),
+      inset 0 1px 0 rgba(255,255,255,.05);
+  }
+  .tile{
+    box-shadow:
+      0 2px 5px rgba(0,0,0,.5),
+      0 28px 56px -18px rgba(0,0,0,.85),
+      inset 0 1px 0 rgba(255,255,255,.05);
+    transition:border-color .2s var(--ease), background .2s var(--ease), transform .25s cubic-bezier(.16,1,.3,1), box-shadow .25s var(--ease);
+  }
+  a.tile:hover{
+    transform:translateY(-6px) scale(1.015);
+    box-shadow:
+      0 6px 14px rgba(0,0,0,.55),
+      0 40px 70px -20px rgba(0,0,0,.9),
+      inset 0 1px 0 rgba(255,255,255,.07);
+  }
+  .link-btn{
+    box-shadow:
+      0 2px 4px rgba(0,0,0,.45),
+      0 20px 42px -16px rgba(0,0,0,.8),
+      inset 0 1px 0 rgba(255,255,255,.05);
+  }
+  .gear-btn{
+    box-shadow: 0 6px 20px rgba(0,0,0,.5), 0 2px 4px rgba(0,0,0,.4);
+  }
+  .hero{
+    box-shadow: 0 40px 70px -30px rgba(0,0,0,.85);
+  }
+  .card, .card-sub{
+    box-shadow:
+      0 2px 5px rgba(0,0,0,.5),
+      0 28px 56px -18px rgba(0,0,0,.85),
+      inset 0 1px 0 rgba(255,255,255,.05);
+  }
+  .section-label, h1, h2{
+    text-shadow:0 2px 8px rgba(0,0,0,.3);
+  }
+
+  /* ================= iPhone: voorkom automatisch inzoomen op formuliervelden ================= */
+  @media (max-width:600px){
+    input, select, textarea{ font-size:16px !important; }
+  }
+  button, a{ -webkit-tap-highlight-color:transparent; }
+  html{ overscroll-behavior-y:none; }
+
+</style>
+
+<style id="sidebar-layout">
+  /* Layout-verbouwing: vaste studiezijbalken met een rustige middenkolom. */
+  :root{ --sidebar-width:clamp(250px, 22vw, 330px); }
+  body{ overflow-x:hidden; }
+  .hero, .wrap, footer{
+    margin-left:var(--sidebar-width);
+    margin-right:var(--sidebar-width);
+  }
+  .hero{ padding-left:clamp(18px, 3vw, 42px); padding-right:clamp(18px, 3vw, 42px); }
+  .hero-inner, .wrap{ max-width:720px; }
+  .wrap{ padding-left:clamp(18px, 3vw, 42px); padding-right:clamp(18px, 3vw, 42px); }
+  .tile-grid{ grid-template-columns:1fr; }
+
+  .ai-widget{
+    inset:0 auto 0 0 !important;
+    width:var(--sidebar-width) !important;
+    height:100dvh !important;
+    padding:0 !important;
+    border-right:1px solid var(--card-border);
+    background:var(--bg-alt);
+  }
+  .ai-shell, .ai-widget.open .ai-shell{
+    width:100% !important;
+    max-width:none !important;
+    height:100% !important;
+    border:0 !important;
+    border-radius:0 !important;
+    box-shadow:12px 0 42px rgba(0,0,0,.22) !important;
+  }
+  .ai-bubble{ display:none !important; }
+  .ai-panel, .ai-widget.open .ai-panel{
+    position:absolute !important;
+    inset:0 !important;
+    opacity:1 !important;
+    pointer-events:auto !important;
+  }
+  .ai-panel-header{ min-height:65px; padding:18px 20px; }
+  .ai-close{ display:none; }
+  .ai-messages{ padding:18px; }
+  .ai-input-row{ padding:14px; padding-bottom:max(14px, env(safe-area-inset-bottom)); }
+
+  .mini-player{
+    inset:0 0 0 auto !important;
+    width:var(--sidebar-width) !important;
+    max-width:none !important;
+    height:100dvh !important;
+    padding:0 22px !important;
+    display:flex;
+    flex-direction:column;
+    align-items:stretch;
+    justify-content:center;
+    border-left:1px solid var(--card-border);
+    background:var(--bg-alt);
+    box-shadow:-12px 0 42px rgba(0,0,0,.22);
+  }
+  .mini-player::before{
+    content:"Muziek";
+    position:absolute;
+    top:22px; left:22px;
+    font-size:13px; font-weight:600;
+  }
+  .mini-player.idle{ opacity:1 !important; }
+  .mp-login{ width:100%; padding:12px 14px; }
+  .mini-player.logged-in.collapsed .mp-collapsed{ display:none !important; }
+  .mini-player.logged-in .mp-body,
+  .mini-player.logged-in:not(.collapsed) .mp-body{
+    display:flex !important;
+    flex-direction:column;
+    gap:16px;
+    padding:18px;
+  }
+  .mp-art-wrap, .mp-art{ width:min(180px, 100%) !important; height:auto !important; aspect-ratio:1; }
+  .mp-info{ width:100%; text-align:center; }
+  .mp-title{ font-size:14px; }
+  .mp-controls{ justify-content:center; gap:5px; }
+  .mp-btn{ width:38px; height:38px; }
+
+  @view-transition{ navigation:auto; }
+  ::view-transition-group(wiskunde),
+  ::view-transition-group(biologie),
+  ::view-transition-group(scheikunde),
+  ::view-transition-group(natuurkunde),
+  ::view-transition-group(nederlands){
+    animation-duration:460ms;
+    animation-timing-function:var(--ease);
+  }
+  .tile.is-navigating{ z-index:10000; transform:scale(1.035); border-color:var(--tile-color); }
+
+  @media(max-width:980px){
+    :root{ --mobile-dock-height:72px; }
+    body{ padding-bottom:calc(var(--mobile-dock-height) + env(safe-area-inset-bottom)); }
+    .hero, .wrap, footer{ margin-left:0; margin-right:0; }
+    .hero-inner, .wrap{ max-width:820px; }
+    .tile-grid{ grid-template-columns:repeat(2, minmax(0,1fr)); }
+
+    .ai-widget{
+      left:16px !important; right:auto !important;
+      top:auto !important; bottom:max(12px, env(safe-area-inset-bottom)) !important;
+      width:52px !important; height:52px !important;
+      border:0; background:transparent; overflow:visible;
+    }
+    .ai-shell, .ai-widget.open .ai-shell{
+      position:relative !important;
+      width:52px !important; height:52px !important;
+      border:1px solid var(--card-border) !important;
+      border-radius:50% !important;
+      box-shadow:0 8px 28px rgba(0,0,0,.45) !important;
+    }
+    .ai-bubble{ display:flex !important; }
+    .ai-panel{ opacity:0 !important; pointer-events:none !important; }
+    .ai-widget.open{ inset:0 !important; width:100vw !important; height:100dvh !important; background:rgba(0,0,0,.68); z-index:10001; }
+    .ai-widget.open .ai-shell{
+      position:absolute !important;
+      inset:12px !important;
+      width:auto !important; height:auto !important;
+      border-radius:var(--radius) !important;
+      background:var(--card);
+    }
+    .ai-widget.open .ai-bubble{ display:none !important; }
+    .ai-widget.open .ai-panel{ opacity:1 !important; pointer-events:auto !important; }
+    .ai-close{ display:block; }
+
+    .mini-player{
+      inset:auto 16px max(12px, env(safe-area-inset-bottom)) auto !important;
+      width:auto !important; height:52px !important;
+      padding:0 !important;
+      border:0; background:transparent; box-shadow:none;
+      display:block;
+    }
+    .mini-player::before{ display:none; }
+    .mp-login{ height:52px; border-radius:26px; padding:0 18px; }
+    .mini-player.logged-in.collapsed .mp-collapsed{ display:flex !important; }
+    .mini-player.logged-in.collapsed .mp-body{ display:none !important; }
+    .mini-player.logged-in:not(.collapsed){
+      inset:0 !important; width:100vw !important; height:100dvh !important;
+      padding:20px !important; display:flex; align-items:center; justify-content:center;
+      background:rgba(0,0,0,.72); max-width:none !important;
+    }
+    .mini-player.logged-in:not(.collapsed) .mp-body{
+      width:min(360px, 100%); padding:24px; background:var(--card);
+    }
+    .mini-player.logged-in:not(.collapsed) .mp-art-wrap,
+    .mini-player.logged-in:not(.collapsed) .mp-art{ width:min(220px, 68vw) !important; }
+  }
+  @media(max-width:560px){
+    .tile-grid{ grid-template-columns:1fr; }
+    .hero{ padding-top:44px; }
+  }
+  @media(prefers-reduced-motion:reduce){
+    ::view-transition-group(*){ animation-duration:1ms !important; }
+  }
+</style>
+</head>
+<body>
+
+  <header class="hero">
+    <div class="hero-inner">
+      <p class="eyebrow">Studiehub</p>
+      <h1 class="name">Parker Bergman</h1>
+      <div class="meta-row">
+        <span class="byline">5G</span>
+        <a href="mailto:el128979@leerling.eligant.nl">el128979@leerling.eligant.nl</a>
+      </div>
+
+      <!-- PIN GATE -->
+      <div class="pin-card" id="pin-card">
+        <p>Voer PIN in om de studiehub te ontgrendelen.</p>
+        <form class="pin-form" id="pin-form" autocomplete="off">
+          <input
+            class="pin-input"
+            id="pin-input"
+            type="password"
+            inputmode="numeric"
+            pattern="[0-9]*"
+            maxlength="8"
+            placeholder="••••"
+            aria-label="PIN code"
+            required
+          >
+          <button class="pin-submit" type="submit">Ontgrendel</button>
+        </form>
+        <p class="pin-error" id="pin-error">Onjuiste PIN. Probeer opnieuw.</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div id="dashboard">
+
+      <div class="tile-grid">
+        <a class="tile" href="wiskunde.html" data-subject="wiskunde" style="view-transition-name:wiskunde; --tile-color:#eaeaea;">
+          <div class="tile-icon">∑</div>
+          <div class="tile-body">
+            <div class="tile-title">Wiskunde</div>
+            <div class="tile-sub">Deel 1 · hoofdstukken, abc-formule, cijfers</div>
+          </div>
+          </a>
+
+        <a class="tile" href="biologie.html" data-subject="biologie" style="view-transition-name:biologie; --tile-color:#2ecc71;">
+          <div class="tile-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 3c0 5 10 5 10 10s-10 5-10 10M17 3c0 5-10 5-10 10s10 5 10 10"/><path d="M8.2 7h7.6M8.2 17h7.6"/></svg></div>
+          <div class="tile-body">
+            <div class="tile-title">Biologie</div>
+            <div class="tile-sub">Thema's, Binas legenda, foutenlogboek</div>
+          </div>
+          </a>
+
+        <a class="tile" href="scheikunde.html" data-subject="scheikunde" style="view-transition-name:scheikunde; --tile-color:#e74c3c;">
+          <div class="tile-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M10 3h4M11 3v6l-6 11a1.2 1.2 0 0 0 1.1 1.7h11.8a1.2 1.2 0 0 0 1.1-1.7L13 9V3"/><path d="M8.5 15h7"/></svg></div>
+          <div class="tile-body">
+            <div class="tile-title">Scheikunde</div>
+            <div class="tile-sub">Hoofdstukken, mol- &amp; pH-rekenmachine, Binas legenda</div>
+          </div>
+          </a>
+
+        <a class="tile" href="natuurkunde.html" data-subject="natuurkunde" style="view-transition-name:natuurkunde; --tile-color:#3498db;">
+          <div class="tile-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/><ellipse cx="12" cy="12" rx="9" ry="3.6"/><ellipse cx="12" cy="12" rx="9" ry="3.6" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="9" ry="3.6" transform="rotate(120 12 12)"/></svg></div>
+          <div class="tile-body">
+            <div class="tile-title">Natuurkunde</div>
+            <div class="tile-sub">Newton hoofdstukken, Binas legenda, eenheden omrekenen</div>
+          </div>
+          </a>
+
+        <a class="tile" href="nederlands.html" data-subject="nederlands" style="view-transition-name:nederlands; --tile-color:#ffffff;">
+          <div class="tile-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 5c-2-1.3-4.4-2-7-2v14c2.6 0 5 .7 7 2 2-1.3 4.4-2 7-2V3c-2.6 0-5 .7-7 2Z"/><path d="M12 5v14"/></svg></div>
+          <div class="tile-body">
+            <div class="tile-title">Nederlands</div>
+            <div class="tile-sub">Leeslijst, alinea-opbouw, dyslexie-leesmodus</div>
+          </div>
+          </a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- SETTINGS GEAR + DRAWER -->
+  <button type="button" class="gear-btn" id="gear-btn" aria-label="Instellingen" aria-haspopup="true" aria-expanded="false">⚙</button>
+  <div class="settings-backdrop" id="settings-backdrop"></div>
+  <aside class="settings-drawer" id="settings-drawer" aria-hidden="true">
+    <div class="settings-drawer-head">
+      <h2>Instellingen</h2>
+      <button type="button" class="settings-close" id="settings-close" aria-label="Sluiten">✕</button>
+    </div>
+    <p class="section-label">Snelle links</p>
+    <div class="link-grid">
+      <a class="link-btn" id="cal-link" href="webcal://p172-caldav.icloud.com/published/2/MTYzNDc5ODA0MzkxNjM0N9_-1OcZvIWnJCn4CwXkRyIF_7WhnFHvpElqRX1YeYEiO7Nf1mIp0WhtVKTIkMxd3IAN0xZ4CItvsWEv2V32s0c">
+        <span><span class="lbl">Koppel Apple Agenda</span><span class="sub">iCloud kalender-abonnement</span></span>
+      </a>
+    </div>
+  </aside>
+
+  <footer>Parker Bergman · 5G · Studiehub</footer>
+
+  <script src="https://sdk.scdn.co/spotify-player.js"></script>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------------- CONFIG ----------------
+     Let op: dit is client-side "beveiliging". Iedereen die de
+     broncode bekijkt (view-source) kan deze PIN aflezen. Gebruik
+     dit als een simpele drempel, niet als echte beveiliging van
+     gevoelige gegevens. */
+  var PIN = "1977";
+  var SESSION_KEY = "studiehub_unlocked"; // gedeeld met de vakpagina's: 1x ontgrendelen binnen je tab-sessie volstaat
+
+  var pinCard = document.getElementById("pin-card");
+  var pinForm = document.getElementById("pin-form");
+  var pinInput = document.getElementById("pin-input");
+  var pinError = document.getElementById("pin-error");
+  var dashboard = document.getElementById("dashboard");
+
+  function unlock(animated){
+    if (animated){
+      pinCard.classList.add("unlocking");
+      setTimeout(function(){
+        pinCard.style.display = "none";
+        dashboard.classList.add("visible");
+      }, 360);
+    } else {
+      pinCard.style.display = "none";
+      dashboard.classList.add("visible");
+    }
+    try { sessionStorage.setItem(SESSION_KEY, "true"); } catch(e){}
+  }
+
+  // Herstel ontgrendelstatus binnen deze sessie (zonder animatie, direct zichtbaar)
+  try {
+    if (sessionStorage.getItem(SESSION_KEY) === "true") {
+      unlock(false);
+    }
+  } catch(e){}
+
+  pinForm.addEventListener("submit", function(e){
+    e.preventDefault();
+    var val = pinInput.value.trim();
+    if (val === PIN) {
+      pinError.classList.remove("show", "shake");
+      unlock(true);
+    } else {
+      pinError.classList.add("show");
+      pinError.classList.remove("shake");
+      // force reflow zodat de shake-animatie opnieuw kan triggeren
+      void pinError.offsetWidth;
+      pinError.classList.add("shake");
+      pinInput.value = "";
+      pinInput.focus();
+    }
+  });
+
+  /* ---------------- SETTINGS DRAWER ---------------- */
+  var gearBtn = document.getElementById("gear-btn");
+  var drawer = document.getElementById("settings-drawer");
+  var backdrop = document.getElementById("settings-backdrop");
+  var closeBtn = document.getElementById("settings-close");
+
+  function openDrawer(){
+    drawer.classList.add("open");
+    backdrop.classList.add("open");
+    drawer.setAttribute("aria-hidden", "false");
+    gearBtn.setAttribute("aria-expanded", "true");
+  }
+  function closeDrawer(){
+    drawer.classList.remove("open");
+    backdrop.classList.remove("open");
+    drawer.setAttribute("aria-hidden", "true");
+    gearBtn.setAttribute("aria-expanded", "false");
+  }
+
+  gearBtn.addEventListener("click", function(){
+    if (drawer.classList.contains("open")) { closeDrawer(); } else { openDrawer(); }
+  });
+  closeBtn.addEventListener("click", closeDrawer);
+  backdrop.addEventListener("click", closeDrawer);
+  document.addEventListener("keydown", function(e){
+    if (e.key === "Escape") { closeDrawer(); }
+  });
+
+})();
+</script>
+
+
+  <!-- ---------------- AI ASSISTENT (Gemini) ---------------- -->
+  <div id="ai-widget" class="ai-widget">
+    <div class="ai-shell" id="ai-shell">
+      <button class="ai-bubble" id="ai-bubble" type="button" aria-label="Open AI-assistent"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5L18 18M18 6l-2.5 2.5M8.5 15.5L6 18"/></svg></button>
+
+      <div class="ai-panel" id="ai-panel">
+        <div class="ai-panel-header">
+          <span>Studie-assistent</span>
+          <button class="ai-close" id="ai-close-btn" type="button" aria-label="Sluiten">✕</button>
+        </div>
+        <div class="ai-messages" id="ai-messages">
+          <div class="ai-msg ai-msg-bot">Hoi! Waar kan ik je mee helpen bij het studeren?</div>
+        </div>
+        <form class="ai-input-row" id="ai-form" autocomplete="off">
+          <input class="ai-input" id="ai-input" type="text" placeholder="Stel een vraag..." aria-label="Bericht">
+          <button class="ai-send" id="ai-send-btn" type="submit" aria-label="Verstuur">➤</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+<script>
+(function(){
+  "use strict";
+
+  var WORKER_URL = "https://studiehub-gemini-proxy.parkerbergman10.workers.dev";
+  var ALLOWED_HOST = "wiskunde-schrift.github.io";
+
+  var widget = document.getElementById("ai-widget");
+  var bubble = document.getElementById("ai-bubble");
+  var closeBtn = document.getElementById("ai-close-btn");
+  var messagesEl = document.getElementById("ai-messages");
+  var form = document.getElementById("ai-form");
+  var input = document.getElementById("ai-input");
+
+  var history = []; // { role: "user"|"model", parts: [{text}] }
+
+  function openPanel(){
+    widget.classList.add("open");
+    setTimeout(function(){ input.focus(); }, 420);
+  }
+  function closePanel(){
+    widget.classList.remove("open");
+  }
+
+  bubble.addEventListener("click", openPanel);
+  closeBtn.addEventListener("click", closePanel);
+
+  function addMessage(text, who){
+    var div = document.createElement("div");
+    div.className = "ai-msg " + (who === "user" ? "ai-msg-user" : "ai-msg-bot");
+    div.textContent = text;
+    messagesEl.appendChild(div);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+    return div;
+  }
+
+  function addTyping(){
+    var div = document.createElement("div");
+    div.className = "ai-msg ai-msg-bot ai-typing";
+    div.innerHTML = "<span></span><span></span><span></span>";
+    messagesEl.appendChild(div);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+    return div;
+  }
+
+  function askGemini(question){
+    if (window.location.hostname !== ALLOWED_HOST){
+      addMessage("De assistent werkt alleen op de officiële studiehub-website.", "bot");
+      return;
+    }
+
+    history.push({ role: "user", parts: [{ text: question }] });
+
+    var typingEl = addTyping();
+
+    fetch(WORKER_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        contents: history,
+        systemInstruction: {
+          parts: [{ text: "Je bent een behulpzame studie-assistent voor een middelbare scholier (5G). Antwoord kort, duidelijk en in het Nederlands, tenzij er om een andere taal wordt gevraagd." }]
+        }
+      })
+    })
+      .then(function(res){ return res.json(); })
+      .then(function(data){
+        typingEl.remove();
+        var reply = "Sorry, ik kon geen antwoord genereren.";
+        if (data && data.candidates && data.candidates.length &&
+            data.candidates[0].content && data.candidates[0].content.parts &&
+            data.candidates[0].content.parts.length){
+          reply = data.candidates[0].content.parts.map(function(p){ return p.text || ""; }).join("");
+        } else if (data && data.error && data.error.message){
+          reply = "Fout: " + data.error.message;
+        }
+        addMessage(reply, "bot");
+        history.push({ role: "model", parts: [{ text: reply }] });
+      })
+      .catch(function(err){
+        typingEl.remove();
+        addMessage("Er ging iets mis met de verbinding. Probeer het opnieuw.", "bot");
+      });
+  }
+
+  form.addEventListener("submit", function(e){
+    e.preventDefault();
+    var val = input.value.trim();
+    if (!val) return;
+    addMessage(val, "user");
+    input.value = "";
+    askGemini(val);
+  });
+
+})();
+</script>
+
+  <!-- ---------------- FLOATING MINI PLAYER ---------------- -->
+  <div id="mini-player" class="mini-player">
+    <button class="mp-login" id="mp-login-btn" type="button">Log in met Spotify</button>
+
+    <!-- Collapsed: alleen hoes + play/pauze -->
+    <button class="mp-collapsed" id="mp-collapsed" type="button" aria-label="Open muziekspeler">
+      <img class="mp-art-sm" id="mp-art-sm" src="" alt="">
+      <div class="mp-bars mp-bars-sm" id="mp-bars-sm">
+        <span></span><span></span><span></span><span></span>
+      </div>
+      <span class="mp-mini-toggle" id="mp-mini-toggle">▶︎</span>
+      <span class="mp-live-dot" aria-hidden="true"></span>
+    </button>
+
+    <!-- Uitgeklapt: volledige bediening -->
+    <div class="mp-body" id="mp-body">
+      <div class="mp-art-wrap">
+        <img class="mp-art" id="mp-art" src="" alt="">
+        <div class="mp-bars" id="mp-bars">
+          <span></span><span></span><span></span><span></span>
+        </div>
+      </div>
+      <div class="mp-info">
+        <div class="mp-title" id="mp-title">—</div>
+        <div class="mp-artist" id="mp-artist">—</div>
+      </div>
+      <div class="mp-controls">
+        <button class="mp-btn" id="mp-shuffle-btn" type="button" aria-label="Shuffle" title="Shuffle">&#8646;</button>
+        <button class="mp-btn" id="mp-prev-btn" type="button" aria-label="Vorige" title="Vorige">⏮</button>
+        <button class="mp-btn mp-btn-main" id="mp-toggle-btn" type="button" aria-label="Afspelen" title="Afspelen/pauzeren">▶︎</button>
+        <button class="mp-btn" id="mp-next-btn" type="button" aria-label="Volgende" title="Volgende">⏭</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ================= CONFIG ================= */
+  var CLIENT_ID = "c0217c44e28f422494a5c0b26799daac";
+  var REDIRECT_URI = "https://wiskunde-schrift.github.io/Overzicht/index.html"; // moet exact overeenkomen met Spotify Dashboard
+  var PLAYLIST_URI = "spotify:playlist:37i9dQZF1EIgKXhXqo61vc";
+  var SCOPES = "streaming user-read-email user-read-private user-modify-playback-state user-read-playback-state";
+
+  var LS_VERIFIER = "spotify_pkce_verifier";
+  var LS_ACCESS_TOKEN = "spotify_access_token";
+  var LS_TOKEN_EXPIRES = "spotify_token_expires";
+  var LS_REFRESH_TOKEN = "spotify_refresh_token";
+
+  var miniPlayer = document.getElementById("mini-player");
+  var loginBtn = document.getElementById("mp-login-btn");
+  var collapsedBtn = document.getElementById("mp-collapsed");
+  var mpArtSm = document.getElementById("mp-art-sm");
+  var mpBarsSm = document.getElementById("mp-bars-sm");
+  var mpMiniToggle = document.getElementById("mp-mini-toggle");
+  var mpBody = document.getElementById("mp-body");
+  var mpArtWrap = document.querySelector(".mp-art-wrap");
+  var mpArt = document.getElementById("mp-art");
+  var mpTitle = document.getElementById("mp-title");
+  var mpArtist = document.getElementById("mp-artist");
+  var mpBars = document.getElementById("mp-bars");
+  var shuffleBtn = document.getElementById("mp-shuffle-btn");
+  var toggleBtn = document.getElementById("mp-toggle-btn");
+  var prevBtn = document.getElementById("mp-prev-btn");
+  var nextBtn = document.getElementById("mp-next-btn");
+
+  var player = null;
+  var deviceId = null;
+
+  /* ---------- PKCE helpers ---------- */
+  function generateRandomString(length){
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    var text = "";
+    var randomValues = crypto.getRandomValues(new Uint8Array(length));
+    for (var i = 0; i < length; i++){
+      text += possible[randomValues[i] % possible.length];
+    }
+    return text;
+  }
+
+  function sha256(plain){
+    var encoder = new TextEncoder();
+    var data = encoder.encode(plain);
+    return crypto.subtle.digest("SHA-256", data);
+  }
+
+  function base64urlencode(buffer){
+    var bytes = new Uint8Array(buffer);
+    var str = "";
+    for (var i = 0; i < bytes.byteLength; i++){
+      str += String.fromCharCode(bytes[i]);
+    }
+    return btoa(str).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  }
+
+  function redirectToSpotifyLogin(){
+    var verifier = generateRandomString(64);
+    sessionStorage.setItem(LS_VERIFIER, verifier);
+
+    sha256(verifier).then(function(hashed){
+      var challenge = base64urlencode(hashed);
+      var params = new URLSearchParams({
+        response_type: "code",
+        client_id: CLIENT_ID,
+        scope: SCOPES,
+        code_challenge_method: "S256",
+        code_challenge: challenge,
+        redirect_uri: REDIRECT_URI
+      });
+      window.location.href = "https://accounts.spotify.com/authorize?" + params.toString();
+    });
+  }
+
+  function exchangeCodeForToken(code){
+    var verifier = sessionStorage.getItem(LS_VERIFIER);
+    var body = new URLSearchParams({
+      client_id: CLIENT_ID,
+      grant_type: "authorization_code",
+      code: code,
+      redirect_uri: REDIRECT_URI,
+      code_verifier: verifier
+    });
+
+    return fetch("https://accounts.spotify.com/api/token", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: body
+    }).then(function(res){ return res.json(); })
+      .then(function(data){
+        if (data.access_token){
+          storeToken(data);
+        }
+        return data;
+      });
+  }
+
+  function refreshToken(){
+    var refresh = localStorage.getItem(LS_REFRESH_TOKEN);
+    if (!refresh) return Promise.reject("Geen refresh token");
+    var body = new URLSearchParams({
+      client_id: CLIENT_ID,
+      grant_type: "refresh_token",
+      refresh_token: refresh
+    });
+    return fetch("https://accounts.spotify.com/api/token", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: body
+    }).then(function(res){ return res.json(); })
+      .then(function(data){
+        if (data.access_token){
+          storeToken(data);
+        }
+        return data;
+      });
+  }
+
+  function storeToken(data){
+    localStorage.setItem(LS_ACCESS_TOKEN, data.access_token);
+    localStorage.setItem(LS_TOKEN_EXPIRES, String(Date.now() + (data.expires_in * 1000)));
+    if (data.refresh_token){
+      localStorage.setItem(LS_REFRESH_TOKEN, data.refresh_token);
+    }
+  }
+
+  function getValidToken(){
+    var token = localStorage.getItem(LS_ACCESS_TOKEN);
+    var expires = parseInt(localStorage.getItem(LS_TOKEN_EXPIRES) || "0", 10);
+    if (token && Date.now() < expires - 5000){
+      return Promise.resolve(token);
+    }
+    return refreshToken().then(function(){
+      return localStorage.getItem(LS_ACCESS_TOKEN);
+    });
+  }
+
+  /* ---------- UI states ---------- */
+  var isPlaying = false;
+  var isShuffled = false;
+  var startedOnce = false;
+  var idleTimer = null;
+
+  function showLoggedOut(){
+    miniPlayer.classList.remove("logged-in", "collapsed");
+    loginBtn.style.display = "block";
+  }
+
+  function showLoggedIn(){
+    loginBtn.style.display = "none";
+    miniPlayer.classList.add("logged-in", "collapsed"); // start ingeklapt
+  }
+
+  function expandPlayer(){
+    miniPlayer.classList.remove("collapsed");
+    resetIdleTimer();
+  }
+
+  function collapsePlayer(){
+    miniPlayer.classList.add("collapsed");
+    resetIdleTimer();
+  }
+
+  function setPlayingUI(playing){
+    isPlaying = playing;
+    var icon = playing ? "⏸" : "▶︎";
+    toggleBtn.textContent = icon;
+    mpMiniToggle.textContent = icon;
+    mpBars.classList.toggle("playing", playing);
+    mpBarsSm.classList.toggle("playing", playing);
+  }
+
+  function setShuffleUI(shuffled){
+    isShuffled = shuffled;
+    shuffleBtn.classList.toggle("active", shuffled);
+  }
+
+  function updateTrackInfo(track){
+    if (!track) return;
+    mpTitle.textContent = track.name || "—";
+    mpArtist.textContent = (track.artists || []).map(function(a){ return a.name; }).join(", ") || "—";
+    var art = track.album && track.album.images && track.album.images.length
+      ? track.album.images[track.album.images.length - 1].url
+      : "";
+    if (art){ mpArt.src = art; mpArtSm.src = art; }
+  }
+
+  /* ---------- Idle fade: valt rustig weg als je niks aanraakt ---------- */
+  function resetIdleTimer(){
+    miniPlayer.classList.remove("idle");
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(function(){
+      miniPlayer.classList.add("idle");
+    }, 4000);
+  }
+  ["mousemove","mouseenter","touchstart","click","focusin"].forEach(function(evt){
+    miniPlayer.addEventListener(evt, resetIdleTimer);
+  });
+
+  /* ---------- Handle redirect back from Spotify ---------- */
+  function handleRedirect(){
+    var params = new URLSearchParams(window.location.search);
+    var code = params.get("code");
+    if (code){
+      exchangeCodeForToken(code).then(function(){
+        // Verwijder ?code=... uit de URL
+        window.history.replaceState({}, document.title, window.location.pathname);
+        initPlayer();
+      });
+      return true;
+    }
+    return false;
+  }
+
+  /* ---------- Web Playback SDK ---------- */
+  window.onSpotifyWebPlaybackSDKReady = function(){
+    if (localStorage.getItem(LS_ACCESS_TOKEN)){
+      initPlayer();
+    }
+  };
+
+  function initPlayer(){
+    if (player) { showLoggedIn(); return; }
+
+    player = new Spotify.Player({
+      name: "Studiehub",
+      getOAuthToken: function(cb){
+        getValidToken().then(function(token){ cb(token); });
+      },
+      volume: 0.7
+    });
+
+    player.addListener("ready", function(data){
+      deviceId = data.device_id;
+      showLoggedIn();
+    });
+
+    player.addListener("player_state_changed", function(state){
+      if (!state) return;
+      setPlayingUI(!state.paused);
+      setShuffleUI(!!state.shuffle);
+      if (state.track_window && state.track_window.current_track){
+        updateTrackInfo(state.track_window.current_track);
+        startedOnce = true;
+      }
+    });
+
+    player.addListener("initialization_error", function(){ /* browser ondersteunt playback niet */ });
+    player.addListener("authentication_error", function(){ showLoggedOut(); });
+    player.addListener("account_error", function(){ /* Spotify Premium vereist */ });
+
+    player.connect();
+  }
+
+  function startPlaylist(){
+    if (!deviceId) return;
+    getValidToken().then(function(token){
+      fetch("https://api.spotify.com/v1/me/player/play?device_id=" + deviceId, {
+        method: "PUT",
+        headers: {
+          "Authorization": "Bearer " + token,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ context_uri: PLAYLIST_URI })
+      }).then(function(res){
+        if (res.status === 204 || res.ok){
+          startedOnce = true;
+          setPlayingUI(true);
+        }
+      });
+    });
+  }
+
+  function togglePlayback(){
+    if (!startedOnce){
+      startPlaylist();
+      return;
+    }
+    if (!player) return;
+    player.togglePlay();
+  }
+
+  function nextTrack(){
+    getValidToken().then(function(token){
+      fetch("https://api.spotify.com/v1/me/player/next?device_id=" + deviceId, {
+        method: "POST",
+        headers: { "Authorization": "Bearer " + token }
+      });
+    });
+  }
+
+  function prevTrack(){
+    getValidToken().then(function(token){
+      fetch("https://api.spotify.com/v1/me/player/previous?device_id=" + deviceId, {
+        method: "POST",
+        headers: { "Authorization": "Bearer " + token }
+      });
+    });
+  }
+
+  function toggleShuffle(){
+    var newState = !isShuffled;
+    getValidToken().then(function(token){
+      fetch("https://api.spotify.com/v1/me/player/shuffle?state=" + newState + "&device_id=" + deviceId, {
+        method: "PUT",
+        headers: { "Authorization": "Bearer " + token }
+      }).then(function(){ setShuffleUI(newState); });
+    });
+  }
+
+  loginBtn.addEventListener("click", redirectToSpotifyLogin);
+  toggleBtn.addEventListener("click", togglePlayback);
+  prevBtn.addEventListener("click", prevTrack);
+  nextBtn.addEventListener("click", nextTrack);
+  shuffleBtn.addEventListener("click", toggleShuffle);
+
+  collapsedBtn.addEventListener("click", function(e){
+    e.stopPropagation();
+    expandPlayer();
+  });
+
+  // Klik buiten de uitgeklapte speler -> weer inklappen
+  document.addEventListener("click", function(e){
+    if (!miniPlayer.classList.contains("logged-in")) return;
+    if (miniPlayer.classList.contains("collapsed")) return;
+    if (!miniPlayer.contains(e.target)) collapsePlayer();
+  });
+
+  mpArtWrap.addEventListener("click", togglePlayback);
+  resetIdleTimer();
+
+  if (!handleRedirect()){
+    if (localStorage.getItem(LS_ACCESS_TOKEN)){
+      showLoggedIn();
+    } else {
+      showLoggedOut();
+    }
+  }
+
+})();
+</script>
+
+  <style>
+    .ai-widget{
+      position:fixed;
+      left:16px;
+      bottom:16px;
+      z-index:9999;
+      font-family:var(--font-body);
+      color:var(--ink);
+      padding-bottom:env(safe-area-inset-bottom, 0px);
+    }
+
+    /* De 'shell' is de vorm die van bolletje naar chatvenster groeit */
+    .ai-shell{
+      position:relative;
+      width:52px; height:52px;
+      border-radius:50%;
+      border:1px solid var(--card-border);
+      background:var(--card);
+      box-shadow:0 8px 28px rgba(0,0,0,.45), 0 2px 6px rgba(0,0,0,.4);
+      overflow:hidden;
+      transition:
+        width .42s cubic-bezier(.16,1,.3,1),
+        height .42s cubic-bezier(.16,1,.3,1),
+        border-radius .42s cubic-bezier(.16,1,.3,1),
+        border-color .2s var(--ease),
+        box-shadow .3s var(--ease);
+    }
+    .ai-widget.open .ai-shell{
+      width:300px;
+      max-width:calc(100vw - 32px);
+      height:min(420px, 70vh);
+      border-radius:var(--radius);
+      box-shadow:0 20px 50px rgba(0,0,0,.55), 0 4px 12px rgba(0,0,0,.4);
+    }
+
+    .ai-bubble{
+      position:absolute; inset:0;
+      display:flex; align-items:center; justify-content:center;
+      width:100%; height:100%;
+      border:none; background:none;
+      color:var(--ink);
+      cursor:pointer;
+      transition:opacity .18s ease, transform .18s ease;
+    }
+    .ai-shell:hover .ai-bubble{transform:scale(1.06);}
+    .ai-widget.open .ai-bubble{
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .12s ease;
+    }
+
+    .ai-panel{
+      position:absolute; inset:0;
+      display:flex;
+      flex-direction:column;
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .22s ease .16s;
+    }
+    .ai-widget.open .ai-panel{
+      opacity:1;
+      pointer-events:auto;
+    }
+
+    .ai-panel-header{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:12px 14px;
+      border-bottom:1px solid var(--card-border);
+      font-size:13px; font-weight:600;
+      flex-shrink:0;
+    }
+    .ai-close{
+      background:none; border:none; color:var(--ink-faint);
+      font-size:14px; cursor:pointer; padding:4px;
+      border-radius:6px;
+    }
+    .ai-close:hover{color:var(--ink); background:var(--bg-alt);}
+
+    .ai-messages{
+      flex:1;
+      overflow-y:auto;
+      padding:12px 14px;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .ai-msg{
+      max-width:85%;
+      padding:8px 11px;
+      border-radius:12px;
+      font-size:13px;
+      line-height:1.4;
+      white-space:pre-wrap;
+    }
+    .ai-msg-bot{
+      align-self:flex-start;
+      background:var(--bg-alt);
+      border:1px solid var(--card-border);
+      color:var(--ink);
+      border-bottom-left-radius:4px;
+    }
+    .ai-msg-user{
+      align-self:flex-end;
+      background:var(--ink);
+      color:#0f0f11;
+      font-weight:500;
+      border-bottom-right-radius:4px;
+    }
+    .ai-typing{display:flex; align-items:center; gap:4px; padding:11px;}
+    .ai-typing span{
+      width:5px; height:5px; border-radius:50%;
+      background:var(--ink-faint);
+      animation:aityping 1s ease-in-out infinite;
+    }
+    .ai-typing span:nth-child(2){animation-delay:.15s;}
+    .ai-typing span:nth-child(3){animation-delay:.3s;}
+    @keyframes aityping{
+      0%,100%{opacity:.3; transform:translateY(0);}
+      50%{opacity:1; transform:translateY(-2px);}
+    }
+
+    .ai-input-row{
+      display:flex; gap:8px;
+      padding:10px;
+      border-top:1px solid var(--card-border);
+    }
+    .ai-input{
+      flex:1;
+      background:var(--bg-alt);
+      border:1px solid var(--card-border);
+      border-radius:var(--radius-sm);
+      color:var(--ink);
+      font-size:13px;
+      padding:9px 12px;
+      min-width:0;
+    }
+    .ai-input:focus{outline:none; border-color:var(--accent-line);}
+    .ai-send{
+      background:var(--ink);
+      color:#0f0f11;
+      border:none;
+      border-radius:var(--radius-sm);
+      width:36px;
+      font-size:14px;
+      cursor:pointer;
+      transition:opacity .15s var(--ease);
+    }
+    .ai-send:hover{opacity:.88;}
+  </style>
+
+  <style>
+    .mini-player{
+      position:fixed;
+      right:16px;
+      bottom:16px;
+      z-index:9999;
+      font-family:var(--font-body);
+      color:var(--ink);
+      max-width:260px;
+      padding-bottom:env(safe-area-inset-bottom, 0px);
+      transition:opacity .5s var(--ease);
+      opacity:1;
+    }
+    .mini-player.idle{opacity:.28;}
+    .mini-player.idle:hover,
+    .mini-player.idle:focus-within{opacity:1;}
+
+    .mp-login{
+      background:var(--ink);
+      color:#0f0f11;
+      border:none;
+      border-radius:var(--radius-sm);
+      padding:10px 14px;
+      font-size:13px;
+      font-weight:600;
+      cursor:pointer;
+      transition:opacity .15s var(--ease), transform .15s var(--ease);
+      box-shadow:0 3px 8px rgba(0,0,0,.5), 0 24px 48px -14px rgba(0,0,0,.85);
+    }
+    .mp-login:hover{opacity:.88; transform:translateY(-1px);}
+
+    @keyframes mpPopIn{
+      from{opacity:0; transform:scale(.82);}
+      to{opacity:1; transform:scale(1);}
+    }
+
+    /* ---- Collapsed bubble (hoes + play/pauze) ---- */
+    .mp-collapsed{
+      display:none;
+      align-items:center;
+      justify-content:center;
+      position:relative;
+      width:52px; height:52px;
+      border-radius:50%;
+      padding:0;
+      border:1px solid var(--card-border);
+      background:var(--card);
+      box-shadow:0 3px 8px rgba(0,0,0,.5), 0 24px 48px -14px rgba(0,0,0,.85);
+      cursor:pointer;
+      overflow:hidden;
+      transition:border-color .25s var(--ease), box-shadow .25s var(--ease), transform .15s var(--ease);
+    }
+    .mp-collapsed:hover{transform:translateY(-1px) scale(1.03);}
+    .mini-player.logged-in.collapsed .mp-collapsed{
+      display:flex;
+      animation:mpPopIn .3s var(--ease);
+    }
+    .mp-collapsed:has(.mp-bars-sm.playing){
+      border-color:color-mix(in srgb, var(--ok) 55%, var(--card-border));
+      box-shadow:0 8px 28px rgba(0,0,0,.45), 0 0 0 3px color-mix(in srgb, var(--ok) 18%, transparent);
+      animation:mpPopIn .3s var(--ease), mpGlow 2.4s ease-in-out infinite;
+    }
+    @keyframes mpGlow{
+      0%,100%{box-shadow:0 8px 28px rgba(0,0,0,.45), 0 0 0 3px color-mix(in srgb, var(--ok) 14%, transparent);}
+      50%{box-shadow:0 8px 28px rgba(0,0,0,.45), 0 0 0 5px color-mix(in srgb, var(--ok) 26%, transparent);}
+    }
+    .mp-live-dot{
+      position:absolute;
+      top:3px; right:3px;
+      width:8px; height:8px;
+      border-radius:50%;
+      background:var(--ok);
+      border:1.5px solid var(--card);
+      opacity:0;
+      transition:opacity .2s var(--ease);
+    }
+    .mp-collapsed:has(.mp-bars-sm.playing) .mp-live-dot{opacity:1;}
+    .mp-art-sm{
+      width:100%; height:100%;
+      object-fit:cover;
+      background:var(--bg-alt);
+      display:block;
+      transition:transform .3s var(--ease);
+    }
+    .mp-collapsed:hover .mp-art-sm{transform:scale(1.08);}
+    .mp-mini-toggle{
+      position:absolute; inset:0;
+      display:flex; align-items:center; justify-content:center;
+      font-size:16px;
+      background:rgba(15,15,17,.35);
+      opacity:0;
+      transition:opacity .2s var(--ease);
+    }
+    .mp-collapsed:hover .mp-mini-toggle{opacity:1;}
+    .mp-bars-sm{
+      position:absolute; inset:0;
+      display:none;
+      align-items:flex-end;
+      justify-content:center;
+      gap:2px;
+      background:rgba(15,15,17,.3);
+    }
+    .mp-bars-sm.playing{display:flex;}
+
+    /* ---- Expanded card ---- */
+    .mp-body{
+      display:none;
+      align-items:center; gap:10px;
+      background:var(--card);
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:0 3px 8px rgba(0,0,0,.5), 0 24px 48px -14px rgba(0,0,0,.85);
+      padding:10px;
+    }
+    .mini-player.logged-in:not(.collapsed) .mp-body{
+      display:flex;
+      animation:mpPopIn .3s var(--ease);
+    }
+
+    .mp-art-wrap{position:relative; flex-shrink:0; width:46px; height:46px; cursor:pointer; border-radius:8px; overflow:hidden;}
+    .mp-art{
+      width:46px; height:46px;
+      border-radius:8px;
+      object-fit:cover;
+      background:var(--bg-alt);
+      border:1px solid var(--card-border);
+      display:block;
+      transition:transform .35s var(--ease);
+    }
+    .mp-art-wrap:hover .mp-art{transform:scale(1.08) rotate(-2deg);}
+    .mp-bars{
+      position:absolute; inset:0;
+      display:none;
+      align-items:flex-end;
+      justify-content:center;
+      gap:3px;
+      background:rgba(15,15,17,.5);
+      border-radius:8px;
+    }
+    .mp-bars.playing{display:flex;}
+    .mp-bars span, .mp-bars-sm span{
+      width:3px;
+      background:var(--ink);
+      border-radius:2px;
+      height:5px;
+      animation:mpwave 2.6s ease-in-out infinite;
+    }
+    .mp-bars-sm span{width:2.5px;}
+    .mp-bars span:nth-child(1),.mp-bars-sm span:nth-child(1){animation-delay:0s;}
+    .mp-bars span:nth-child(2),.mp-bars-sm span:nth-child(2){animation-delay:.5s;}
+    .mp-bars span:nth-child(3),.mp-bars-sm span:nth-child(3){animation-delay:1s;}
+    .mp-bars span:nth-child(4),.mp-bars-sm span:nth-child(4){animation-delay:.25s;}
+    @keyframes mpwave{
+      0%,100%{height:4px;}
+      50%{height:11px;}
+    }
+    .mp-info{min-width:0; flex:1; cursor:default;}
+    .mp-title{
+      font-size:12.5px; font-weight:600;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .mp-artist{
+      font-size:11px; color:var(--ink-faint);
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .mp-controls{display:flex; align-items:center; gap:0; flex-shrink:0;}
+    .mp-btn{
+      background:none; border:none; color:var(--ink);
+      font-size:14px; cursor:pointer; padding:6px;
+      border-radius:8px;
+      transition:background .15s var(--ease), opacity .15s var(--ease), transform .1s var(--ease);
+    }
+    .mp-btn:hover{background:var(--bg-alt);}
+    .mp-btn:active{transform:scale(.9);}
+    .mp-btn-main{
+      font-size:16px;
+      background:var(--bg-alt);
+      border:1px solid var(--card-border);
+    }
+    .mp-btn-main:hover{border-color:var(--card-border-hover);}
+    .mp-btn.active{opacity:1; color:var(--ok);}
+    #mp-shuffle-btn{opacity:.55;}
+    #mp-shuffle-btn.active{opacity:1;}
+    @media (prefers-reduced-motion: reduce){
+      .mp-bars span, .mp-bars-sm span{animation:none; height:8px;}
+    }
+  </style>
+
+
+<script id="subject-transitions">
+(function(){
+  "use strict";
+  var links = document.querySelectorAll("a.tile[data-subject]");
+  links.forEach(function(link){
+    link.addEventListener("click", function(event){
+      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      if (!document.startViewTransition) return;
+      event.preventDefault();
+      link.classList.add("is-navigating");
+      var destination = link.href;
+      document.startViewTransition(function(){ window.location.href = destination; });
+    });
+  });
+})();
+</script>
+</body>
+</html>
